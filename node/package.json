@@ -2,6 +2,8 @@
   "name": "node",
   "packageManager": "yarn@4.9.4",
   "scripts": {
+    "smt": "tsx src/smt.ts",
+    "leanimt": "tsx src/leanimt.ts",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w ."
   },
@@ -11,5 +13,12 @@
     "tinybench": "^5.0.1",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@iden3/js-crypto": "^1.3.1",
+    "@iden3/js-merkletree": "^1.5.0",
+    "@zk-kit/lean-imt": "^2.2.4",
+    "idb-keyval": "^6.2.2",
+    "poseidon-lite": "^0.3.0"
   }
 }
