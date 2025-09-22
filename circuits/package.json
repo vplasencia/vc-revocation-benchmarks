@@ -1,0 +1,24 @@
+{
+  "name": "node",
+  "packageManager": "yarn@4.9.4",
+  "scripts": {
+    "smt": "tsx src/smt.ts",
+    "leanimt": "tsx src/leanimt.ts",
+    "prettier": "prettier -c .",
+    "prettier:write": "prettier -w .",
+    "compile": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh",
+    "compile:leanimt": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh leanimt",
+    "compile:smt": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh smt",
+    "remove:build": "chmod u+x ./scripts/removeBuildFolder.sh && ./scripts/removeBuildFolder.sh"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@zk-kit/binary-merkle-root.circom": "^2.0.0",
+    "circomlib": "^2.0.5"
+  }
+}
