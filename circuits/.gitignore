@@ -19,4 +19,9 @@ node_modules
 # misc
 .DS_Store
 
+# circuit generated files
 /build
+/circuits
+
+# ptau files
+/ptau

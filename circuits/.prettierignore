@@ -17,4 +17,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# circuit generated files
 /build
+/circuits
+
+# ptau files
+/ptau

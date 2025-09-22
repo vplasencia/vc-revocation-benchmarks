@@ -9,16 +9,21 @@
     "compile": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh",
     "compile:leanimt": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh leanimt",
     "compile:smt": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh smt",
-    "remove:build": "chmod u+x ./scripts/removeBuildFolder.sh && ./scripts/removeBuildFolder.sh"
+    "remove:build": "chmod u+x ./scripts/removeBuildFolder.sh && ./scripts/removeBuildFolder.sh",
+    "create:leanimt-files": "tsx ./scripts/leanimt-create-files.ts 1 10",
+    "run:groth16": "chmod u+x ./scripts/execute-groth16.sh && ./scripts/execute-groth16.sh"
   },
   "devDependencies": {
+    "@semaphore-protocol/identity": "4.13.1",
     "@types/node": "^24.5.0",
+    "@zk-kit/lean-imt": "2.2.4",
+    "poseidon-lite": "^0.3.0",
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@zk-kit/binary-merkle-root.circom": "^2.0.0",
-    "circomlib": "^2.0.5"
+    "@zk-kit/binary-merkle-root.circom": "2.0.0",
+    "circomlib": "2.0.5"
   }
 }
