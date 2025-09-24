@@ -10,8 +10,8 @@
     "compile:leanimt": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh leanimt",
     "compile:smt": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh smt",
     "remove:build": "chmod u+x ./scripts/removeBuildFolder.sh && ./scripts/removeBuildFolder.sh",
-    "create:leanimt-files": "tsx ./scripts/leanimt-create-files.ts 1 10",
-    "create:smt-files": "tsx ./scripts/smt-create-files.ts 2 10",
+    "create:leanimt-files": "tsx ./scripts/leanimt-create-files.ts 1 32",
+    "create:smt-files": "tsx ./scripts/smt-create-files.ts 2 32",
     "run:groth16": "chmod u+x ./scripts/execute-groth16.sh && ./scripts/execute-groth16.sh"
   },
   "devDependencies": {
