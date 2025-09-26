@@ -9,10 +9,12 @@
     "compile": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh",
     "compile:leanimt": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh leanimt",
     "compile:smt": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh smt",
-    "remove:build": "chmod u+x ./scripts/removeBuildFolder.sh && ./scripts/removeBuildFolder.sh",
+    "remove:build": "chmod u+x ./scripts/remove-build-folder.sh && ./scripts/remove-build-folder.sh",
     "create:leanimt-files": "tsx ./scripts/leanimt-create-files.ts 1 32",
     "create:smt-files": "tsx ./scripts/smt-create-files.ts 2 32",
-    "run:groth16": "chmod u+x ./scripts/execute-groth16.sh && ./scripts/execute-groth16.sh"
+    "run:groth16": "chmod u+x ./scripts/execute-groth16.sh && ./scripts/execute-groth16.sh",
+    "execute": "chmod u+x ./scripts/execute.sh && ./scripts/execute.sh",
+    "execute:all": "yarn create:leanimt-files 2 32 && yarn create:smt-files 2 32 && yarn execute 2 32"
   },
   "devDependencies": {
     "@iden3/js-crypto": "^1.3.1",
