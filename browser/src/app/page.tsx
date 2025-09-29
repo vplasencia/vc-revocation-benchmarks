@@ -1,103 +1,274 @@
-import Image from "next/image"
+"use client"
+
+import dynamic from "next/dynamic"
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false })
+
+import { useEffect, useState } from "react"
+import { Bench, Task } from "tinybench"
+import { LeanIMT } from "@zk-kit/lean-imt"
+import { poseidon2 } from "poseidon-lite"
+import { Merkletree, str2Bytes, IndexedDBStorage } from "@iden3/js-merkletree"
+import { ApexOptions } from "apexcharts"
+import Table from "@/components/Table"
+import { generateTable } from "@/utils/generate-table"
+import { addComparisonColumn } from "@/utils/add-comparison-column"
+
+export type ChartProps = {
+  options: ApexOptions
+  series: ApexAxisChartSeries
+}
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [insertConfig, setInsertConfig] = useState({
+    options: {
+      chart: {
+        id: "line-insert"
+      },
+      xaxis: {
+        categories: [1, 2, 3]
+      }
+    },
+    series: [
+      {
+        name: "series-1",
+        data: [1, 2, 3]
+      }
+    ]
+  })
+  const [tableInfo, setTableInfo] = useState([
+    {
+      Function: "-",
+      "ops/sec": "-",
+      "Average Time (ms)": "-",
+      Samples: "-",
+      "Relative to SMT": "-"
+    }
+  ])
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const generateBenchmarks = async () => {
+    const bench = new Bench({
+      name: "Merkle Tree Benchmarks",
+      time: 0,
+      iterations: 1
+    })
+
+    let leanIMT: LeanIMT
+
+    const leanIMTHash = (a: bigint, b: bigint) => poseidon2([a, b])
+
+    let smt: Merkletree
+
+    bench
+      .add(
+        "SMT - Add Member Empty Tree",
+        async () => {
+          await smt.add(200n, 200n)
+        },
+        {
+          beforeEach: async () => {
+            smt = new Merkletree(
+              new IndexedDBStorage(str2Bytes("Tree")),
+              true,
+              10
+            )
+          }
+        }
+      )
+      .add(
+        "LeanIMT - Add Member Empty Tree",
+        () => {
+          leanIMT.insert(200n)
+        },
+        {
+          beforeEach: () => {
+            leanIMT = new LeanIMT(leanIMTHash)
+          }
+        }
+      )
+      .add(
+        "SMT - Add Member 100 Members",
+        async () => {
+          await smt.add(200n, 200n)
+        },
+        {
+          beforeEach: async () => {
+            smt = new Merkletree(
+              new IndexedDBStorage(str2Bytes("Tree")),
+              true,
+              10
+            )
+            const size = 100
+            for (let i = 0; i < size; i++) {
+              await smt.add(BigInt(i + 1), BigInt(i + 1))
+            }
+          }
+        }
+      )
+      .add(
+        "LeanIMT - Add Member 100 Members",
+        () => {
+          leanIMT.insert(200n)
+        },
+        {
+          beforeEach: () => {
+            leanIMT = new LeanIMT(leanIMTHash)
+            const size = 100
+            leanIMT.insertMany(
+              Array.from({ length: size }, (_, i) => BigInt(i + 1))
+            )
+          }
+        }
+      )
+    // .add(
+    //   "SMT - Add Member 500 Members",
+    //   async () => {
+    //     await smt.add(600n, 600n)
+    //   },
+    //   {
+    //     beforeEach: async () => {
+    //       smt = new Merkletree(
+    //         new IndexedDBStorage(str2Bytes("Tree")),
+    //         true,
+    //         20
+    //       )
+    //       const size = 500
+    //       for (let i = 0; i < size; i++) {
+    //         await smt.add(BigInt(i + 1), BigInt(i + 1))
+    //       }
+    //     }
+    //   }
+    // )
+    // .add(
+    //   "LeanIMT - Add Member 500 Members",
+    //   () => {
+    //     leanIMT.insert(600n)
+    //   },
+    //   {
+    //     beforeEach: () => {
+    //       leanIMT = new LeanIMT(leanIMTHash)
+    //       const size = 500
+    //       leanIMT.insertMany(
+    //         Array.from({ length: size }, (_, i) => BigInt(i + 1))
+    //       )
+    //     }
+    //   }
+    // )
+    // .add(
+    //   "SMT - Add Member 1000 Members",
+    //   async () => {
+    //     await smt.add(2000n, 2000n)
+    //   },
+    //   {
+    //     beforeEach: async () => {
+    //       smt = new Merkletree(
+    //         new IndexedDBStorage(str2Bytes("Tree")),
+    //         true,
+    //         20
+    //       )
+    //       const size = 1000
+    //       for (let i = 0; i < size; i++) {
+    //         await smt.add(BigInt(i + 1), BigInt(i + 1))
+    //       }
+    //     }
+    //   }
+    // )
+    // .add(
+    //   "LeanIMT - Add Member 1000 Members",
+    //   () => {
+    //     leanIMT.insert(2000n)
+    //   },
+    //   {
+    //     beforeEach: () => {
+    //       leanIMT = new LeanIMT(leanIMTHash)
+    //       const size = 1000
+    //       leanIMT.insertMany(
+    //         Array.from({ length: size }, (_, i) => BigInt(i + 1))
+    //       )
+    //     }
+    //   }
+    // )
+    // .add(
+    //   "SMT - Add Member 2000 Members",
+    //   async () => {
+    //     await smt.add(3000n, 3000n)
+    //   },
+    //   {
+    //     beforeEach: async () => {
+    //       smt = new Merkletree(
+    //         new IndexedDBStorage(str2Bytes("Tree")),
+    //         true,
+    //         20
+    //       )
+    //       const size = 2000
+    //       for (let i = 0; i < size; i++) {
+    //         await smt.add(BigInt(i + 1), BigInt(i + 1))
+    //       }
+    //     }
+    //   }
+    // )
+    // .add(
+    //   "LeanIMT - Add Member 2000 Members",
+    //   () => {
+    //     leanIMT.insert(3000n)
+    //   },
+    //   {
+    //     beforeEach: () => {
+    //       leanIMT = new LeanIMT(leanIMTHash)
+    //       const size = 2000
+    //       leanIMT.insertMany(
+    //         Array.from({ length: size }, (_, i) => BigInt(i + 1))
+    //       )
+    //     }
+    //   }
+    // )
+
+    await bench.run()
+
+    const table = bench.table((task: Task) => generateTable(task))
+
+    // addComparisonColumn(table, bench)
+
+    // console.log(bench.results)
+    // console.table(table)
+    setTableInfo(
+      table
+        .filter(
+          (row): row is Record<string, string | number | undefined> =>
+            row !== null
+        )
+        .map((row) => ({
+          Function: String(row["Function"] ?? "-"),
+          "ops/sec": String(row["ops/sec"] ?? "-"),
+          "Average Time (ms)": String(row["Average Time (ms)"] ?? "-"),
+          Samples: String(row["Samples"] ?? "-"),
+          "Relative to SMT": String(row["Relative to SMT"] ?? "-")
+        }))
+    )
+  }
+
+  return (
+    <div className="app">
+      {/* <div className="w-90 h-auto">
+        <div className="font-medium text-2xl">Insert members</div>
+        <Chart
+          options={insertConfig.options}
+          series={insertConfig.series}
+          type="line"
+          width="800"
+          height="500"
+        />
+      </div> */}
+      <div>
+        <Table data={tableInfo} />
+      </div>
+      {/* <div className="mt-10">
+        <button onClick={downloadData}>Download Function Benchmarks</button>
+      </div> */}
+      <div className="mt-10">
+        <button onClick={generateBenchmarks}>
+          Generate Function Benchmarks
+        </button>
+      </div>
     </div>
   )
 }
