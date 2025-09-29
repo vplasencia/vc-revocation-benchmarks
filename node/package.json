@@ -5,6 +5,7 @@
     "smt": "tsx src/smt.ts",
     "leanimt": "tsx src/leanimt.ts",
     "bench:all": "tsx src/all-functions.ts",
+    "insert": "tsx src/insert.ts",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w ."
   },
