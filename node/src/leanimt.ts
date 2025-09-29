@@ -47,7 +47,7 @@ const main = async () => {
     .add(
       "LeanIMT - Generate Proof",
       () => {
-        leanIMTProof = leanIMT.generateProof(0)
+        leanIMT.generateProof(0)
       },
       {
         beforeAll: () => {
@@ -58,9 +58,21 @@ const main = async () => {
         }
       }
     )
-    .add("LeanIMT - Verify Proof", () => {
-      leanIMT.verifyProof(leanIMTProof)
-    })
+    .add(
+      "LeanIMT - Verify Proof",
+      () => {
+        leanIMT.verifyProof(leanIMTProof)
+      },
+      {
+        beforeAll: () => {
+          leanIMT = new LeanIMT(leanIMTHash)
+          leanIMT.insertMany(
+            Array.from({ length: 10 }, (_, i) => BigInt(i + 1))
+          )
+          leanIMTProof = leanIMT.generateProof(0)
+        }
+      }
+    )
 
   await bench.run()
 
