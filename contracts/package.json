@@ -2,6 +2,9 @@
   "name": "contracts",
   "version": "1.0.0",
   "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:report-gas": "REPORT_GAS=true hardhat test",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w ."
   },
