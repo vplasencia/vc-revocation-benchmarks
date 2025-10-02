@@ -6,14 +6,14 @@ import {InternalLeanIMT, LeanIMTData} from "@zk-kit/lean-imt.sol/InternalLeanIMT
 contract LeanIMTBench {
     using InternalLeanIMT for LeanIMTData;
 
-    LeanIMTData internal merkleTree;
+    LeanIMTData internal tree;
 
     function insert(uint256 leaf) external returns (uint256) {
-        return merkleTree._insert(leaf);
+        return tree._insert(leaf);
     }
 
     function insertMany(uint256[] calldata leaves) external returns (uint256) {
-        return merkleTree._insertMany(leaves);
+        return tree._insertMany(leaves);
     }
 
     function update(
@@ -21,10 +21,10 @@ contract LeanIMTBench {
         uint256 newLeaf,
         uint256[] calldata merkleProofSiblings
     ) external {
-        merkleTree._update(oldLeaf, newLeaf, merkleProofSiblings);
+        tree._update(oldLeaf, newLeaf, merkleProofSiblings);
     }
 
     function root() public view returns (uint256) {
-        return merkleTree._root();
+        return tree._root();
     }
 }
