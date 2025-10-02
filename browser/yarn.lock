@@ -598,6 +598,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@semaphore-protocol/identity@npm:^4.13.1":
+  version: 4.13.1
+  resolution: "@semaphore-protocol/identity@npm:4.13.1"
+  dependencies:
+    "@zk-kit/baby-jubjub": "npm:1.0.3"
+    "@zk-kit/eddsa-poseidon": "npm:1.0.4"
+    "@zk-kit/utils": "npm:1.3.0"
+    poseidon-lite: "npm:0.3.0"
+  checksum: 10/2c696149c7115e93781cc7c022b62c76a5566fcace29d3cb59bc101a4277a7b25c0a04b31ff9b31619d233c6afc95a5fd8041fb0b3973ccfda7ab91f2a0539d3
+  languageName: node
+  linkType: hard
+
 "@svgdotjs/svg.draggable.js@npm:^3.0.4":
   version: 3.0.6
   resolution: "@svgdotjs/svg.draggable.js@npm:3.0.6"
@@ -1162,12 +1174,51 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zk-kit/baby-jubjub@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@zk-kit/baby-jubjub@npm:1.0.3"
+  dependencies:
+    "@zk-kit/utils": "npm:1.2.1"
+  checksum: 10/ae64d27f43ed53df15eebfb3468dadc202a587201a711b8716f1b855ea3b83e01e7eb5769eaa5c030979099c353396a0b1bf12dfa9c7575adce402ca64989e12
+  languageName: node
+  linkType: hard
+
+"@zk-kit/eddsa-poseidon@npm:1.0.4":
+  version: 1.0.4
+  resolution: "@zk-kit/eddsa-poseidon@npm:1.0.4"
+  dependencies:
+    "@zk-kit/baby-jubjub": "npm:1.0.3"
+    "@zk-kit/utils": "npm:1.2.1"
+    buffer: "npm:6.0.3"
+    poseidon-lite: "npm:0.3.0"
+  checksum: 10/f8c9603b8985813ad3ad09130306c529a754fa97f952a50ccf2762227c1e256cfce1c9f2b8bf5ed570d82a443a86ced56ce3f6fc30b57501c5e2a584be8f3b03
+  languageName: node
+  linkType: hard
+
 "@zk-kit/lean-imt@npm:^2.2.4":
   version: 2.2.4
   resolution: "@zk-kit/lean-imt@npm:2.2.4"
   dependencies:
     "@zk-kit/utils": "npm:1.4.1"
   checksum: 10/032f30b62e561a6bd1e1bf8ad79ead6a0a4c80f0182361d8ff3d19a7818b3c2569831be3712fb9ec9f96c18bdc35c226511481f64bec57057765f7b6a87b3e9f
+  languageName: node
+  linkType: hard
+
+"@zk-kit/utils@npm:1.2.1":
+  version: 1.2.1
+  resolution: "@zk-kit/utils@npm:1.2.1"
+  dependencies:
+    buffer: "npm:^6.0.3"
+  checksum: 10/05cb209adadad753ae9ca9be7a1664fb4c3259a703f64e8b0af637e5fa4b2a9099c21b80a30df62cfe826b165941e1dfe0e95decde5a4eafd53328692cb0a4b8
+  languageName: node
+  linkType: hard
+
+"@zk-kit/utils@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@zk-kit/utils@npm:1.3.0"
+  dependencies:
+    buffer: "npm:^6.0.3"
+  checksum: 10/cfeb48687486034250f2878db115a54b02d3dca8a10d372e861bc6825e23dc1add5497e512adf4ed39706c62f4841384e138db1fbec3320af87deeabaf428063
   languageName: node
   linkType: hard
 
@@ -1448,6 +1499,7 @@ __metadata:
     "@eslint/eslintrc": "npm:^3"
     "@iden3/js-crypto": "npm:^1.3.1"
     "@iden3/js-merkletree": "npm:^1.5.0"
+    "@semaphore-protocol/identity": "npm:^4.13.1"
     "@tailwindcss/postcss": "npm:^4"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
@@ -1469,7 +1521,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"buffer@npm:^6.0.3":
+"buffer@npm:6.0.3, buffer@npm:^6.0.3":
   version: 6.0.3
   resolution: "buffer@npm:6.0.3"
   dependencies:
@@ -3386,7 +3438,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"poseidon-lite@npm:^0.3.0":
+"poseidon-lite@npm:0.3.0, poseidon-lite@npm:^0.3.0":
   version: 0.3.0
   resolution: "poseidon-lite@npm:0.3.0"
   checksum: 10/1e7294f7fed91e1cdc3aee7bd0380461bfdba74ba34d100c2fc4e3d5434d09af0644f6c889b749b9511fd3867216a1aa6d575f070b716c6756b1f56c0067b71d

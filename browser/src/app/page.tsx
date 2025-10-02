@@ -1,273 +1,210 @@
 "use client"
 
-import dynamic from "next/dynamic"
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false })
-
-import { useEffect, useState } from "react"
-import { Bench, Task } from "tinybench"
-import { LeanIMT } from "@zk-kit/lean-imt"
+import { useCallback, useState } from "react"
+import { LeanIMT, LeanIMTMerkleProof } from "@zk-kit/lean-imt"
 import { poseidon2 } from "poseidon-lite"
-import { Merkletree, str2Bytes, IndexedDBStorage } from "@iden3/js-merkletree"
-import { ApexOptions } from "apexcharts"
-import Table from "@/components/Table"
-import { generateTable } from "@/utils/generate-table"
-import { addComparisonColumn } from "@/utils/add-comparison-column"
+import {
+  Merkletree,
+  str2Bytes,
+  InMemoryDB,
+  verifyProof,
+  Proof
+} from "@iden3/js-merkletree"
+import { Identity } from "@semaphore-protocol/identity"
+import { run } from "@/utils/run-function"
+import InputNumber from "@/components/InputNumber"
 
-export type ChartProps = {
-  options: ApexOptions
-  series: ApexAxisChartSeries
-}
+const functions = [
+  "Generate Proof",
+  "Verify Proof",
+  "Insert member",
+  "Update Member"
+]
 
 export default function Home() {
-  const [insertConfig, setInsertConfig] = useState({
-    options: {
-      chart: {
-        id: "line-insert"
-      },
-      xaxis: {
-        categories: [1, 2, 3]
-      }
-    },
-    series: [
-      {
-        name: "series-1",
-        data: [1, 2, 3]
-      }
-    ]
-  })
-  const [tableInfo, setTableInfo] = useState([
-    {
-      Function: "-",
-      "ops/sec": "-",
-      "Average Time (ms)": "-",
-      Samples: "-",
-      "Relative to SMT": "-"
+  const [smtMaxLevels, setSMTMaxLevels] = useState<number>(20)
+  const [smtLeaves, setSMTLeaves] = useState<number>(100)
+  const [leanIMTLeaves, setLeanIMTLeaves] = useState<number>(100)
+  const [smtTimes, setSMTTimes] = useState<number[]>([])
+  const [leanIMTTimes, setLeanIMTTimes] = useState<number[]>([])
+
+  const runSMTFunctions = useCallback(async () => {
+    const timeValues = []
+
+    const { commitment: commitment0 } = new Identity()
+
+    const smt = new Merkletree(
+      new InMemoryDB(str2Bytes("Tree")),
+      true,
+      smtMaxLevels
+    )
+    for (let i = 0; i < smtLeaves - 1; i++) {
+      await smt.add(BigInt(i + 1), BigInt(i + 1))
     }
-  ])
+    await smt.add(commitment0, commitment0)
 
-  const generateBenchmarks = async () => {
-    const bench = new Bench({
-      name: "Merkle Tree Benchmarks",
-      time: 0,
-      iterations: 1
-    })
+    const [proof, time0] = await run(
+      async () => await smt.generateProof(commitment0)
+    )
 
-    let leanIMT: LeanIMT
+    timeValues.push(time0)
+
+    setSMTTimes(timeValues.slice())
+
+    const [, time1] = await run(
+      async () =>
+        await verifyProof(
+          await smt.root(),
+          proof.proof as Proof,
+          commitment0,
+          commitment0
+        )
+    )
+
+    timeValues.push(time1)
+
+    setSMTTimes(timeValues.slice())
+
+    const { commitment: commitment1 } = new Identity()
+
+    const [, time2] = await run(
+      async () => await smt.add(commitment1, commitment1)
+    )
+
+    timeValues.push(time2)
+
+    setSMTTimes(timeValues.slice())
+
+    const { commitment: commitment2 } = new Identity()
+
+    const [, time3] = await run(
+      async () => await smt.update(commitment0, commitment2)
+    )
+
+    timeValues.push(time3)
+
+    setSMTTimes(timeValues.slice())
+  }, [smtMaxLevels, smtLeaves])
+
+  const runLeanIMTFunctions = useCallback(async () => {
+    const timeValues = []
+
+    const { commitment: commitment0 } = new Identity()
 
     const leanIMTHash = (a: bigint, b: bigint) => poseidon2([a, b])
-
-    let smt: Merkletree
-
-    bench
-      .add(
-        "SMT - Add Member Empty Tree",
-        async () => {
-          await smt.add(200n, 200n)
-        },
-        {
-          beforeEach: async () => {
-            smt = new Merkletree(
-              new IndexedDBStorage(str2Bytes("Tree")),
-              true,
-              10
-            )
-          }
-        }
-      )
-      .add(
-        "LeanIMT - Add Member Empty Tree",
-        () => {
-          leanIMT.insert(200n)
-        },
-        {
-          beforeEach: () => {
-            leanIMT = new LeanIMT(leanIMTHash)
-          }
-        }
-      )
-      .add(
-        "SMT - Add Member 100 Members",
-        async () => {
-          await smt.add(200n, 200n)
-        },
-        {
-          beforeEach: async () => {
-            smt = new Merkletree(
-              new IndexedDBStorage(str2Bytes("Tree")),
-              true,
-              10
-            )
-            const size = 100
-            for (let i = 0; i < size; i++) {
-              await smt.add(BigInt(i + 1), BigInt(i + 1))
-            }
-          }
-        }
-      )
-      .add(
-        "LeanIMT - Add Member 100 Members",
-        () => {
-          leanIMT.insert(200n)
-        },
-        {
-          beforeEach: () => {
-            leanIMT = new LeanIMT(leanIMTHash)
-            const size = 100
-            leanIMT.insertMany(
-              Array.from({ length: size }, (_, i) => BigInt(i + 1))
-            )
-          }
-        }
-      )
-    // .add(
-    //   "SMT - Add Member 500 Members",
-    //   async () => {
-    //     await smt.add(600n, 600n)
-    //   },
-    //   {
-    //     beforeEach: async () => {
-    //       smt = new Merkletree(
-    //         new IndexedDBStorage(str2Bytes("Tree")),
-    //         true,
-    //         20
-    //       )
-    //       const size = 500
-    //       for (let i = 0; i < size; i++) {
-    //         await smt.add(BigInt(i + 1), BigInt(i + 1))
-    //       }
-    //     }
-    //   }
-    // )
-    // .add(
-    //   "LeanIMT - Add Member 500 Members",
-    //   () => {
-    //     leanIMT.insert(600n)
-    //   },
-    //   {
-    //     beforeEach: () => {
-    //       leanIMT = new LeanIMT(leanIMTHash)
-    //       const size = 500
-    //       leanIMT.insertMany(
-    //         Array.from({ length: size }, (_, i) => BigInt(i + 1))
-    //       )
-    //     }
-    //   }
-    // )
-    // .add(
-    //   "SMT - Add Member 1000 Members",
-    //   async () => {
-    //     await smt.add(2000n, 2000n)
-    //   },
-    //   {
-    //     beforeEach: async () => {
-    //       smt = new Merkletree(
-    //         new IndexedDBStorage(str2Bytes("Tree")),
-    //         true,
-    //         20
-    //       )
-    //       const size = 1000
-    //       for (let i = 0; i < size; i++) {
-    //         await smt.add(BigInt(i + 1), BigInt(i + 1))
-    //       }
-    //     }
-    //   }
-    // )
-    // .add(
-    //   "LeanIMT - Add Member 1000 Members",
-    //   () => {
-    //     leanIMT.insert(2000n)
-    //   },
-    //   {
-    //     beforeEach: () => {
-    //       leanIMT = new LeanIMT(leanIMTHash)
-    //       const size = 1000
-    //       leanIMT.insertMany(
-    //         Array.from({ length: size }, (_, i) => BigInt(i + 1))
-    //       )
-    //     }
-    //   }
-    // )
-    // .add(
-    //   "SMT - Add Member 2000 Members",
-    //   async () => {
-    //     await smt.add(3000n, 3000n)
-    //   },
-    //   {
-    //     beforeEach: async () => {
-    //       smt = new Merkletree(
-    //         new IndexedDBStorage(str2Bytes("Tree")),
-    //         true,
-    //         20
-    //       )
-    //       const size = 2000
-    //       for (let i = 0; i < size; i++) {
-    //         await smt.add(BigInt(i + 1), BigInt(i + 1))
-    //       }
-    //     }
-    //   }
-    // )
-    // .add(
-    //   "LeanIMT - Add Member 2000 Members",
-    //   () => {
-    //     leanIMT.insert(3000n)
-    //   },
-    //   {
-    //     beforeEach: () => {
-    //       leanIMT = new LeanIMT(leanIMTHash)
-    //       const size = 2000
-    //       leanIMT.insertMany(
-    //         Array.from({ length: size }, (_, i) => BigInt(i + 1))
-    //       )
-    //     }
-    //   }
-    // )
-
-    await bench.run()
-
-    const table = bench.table((task: Task) => generateTable(task))
-
-    // addComparisonColumn(table, bench)
-
-    // console.log(bench.results)
-    // console.table(table)
-    setTableInfo(
-      table
-        .filter(
-          (row): row is Record<string, string | number | undefined> =>
-            row !== null
-        )
-        .map((row) => ({
-          Function: String(row["Function"] ?? "-"),
-          "ops/sec": String(row["ops/sec"] ?? "-"),
-          "Average Time (ms)": String(row["Average Time (ms)"] ?? "-"),
-          Samples: String(row["Samples"] ?? "-"),
-          "Relative to SMT": String(row["Relative to SMT"] ?? "-")
-        }))
+    const leanIMT = new LeanIMT(leanIMTHash)
+    leanIMT.insertMany(
+      Array.from({ length: leanIMTLeaves - 1 }, (_, i) => BigInt(i + 1))
     )
-  }
+    leanIMT.insert(commitment0)
+
+    const [proof, time0] = await run(() =>
+      leanIMT.generateProof(leanIMTLeaves - 1)
+    )
+
+    timeValues.push(time0)
+
+    setLeanIMTTimes(timeValues.slice())
+
+    const [, time1] = await run(() =>
+      leanIMT.verifyProof(proof as LeanIMTMerkleProof)
+    )
+
+    timeValues.push(time1)
+
+    setLeanIMTTimes(timeValues.slice())
+
+    const { commitment: commitment1 } = new Identity()
+
+    const [, time2] = await run(() => leanIMT.insert(commitment1))
+
+    timeValues.push(time2)
+
+    setLeanIMTTimes(timeValues.slice())
+
+    const { commitment: commitment2 } = new Identity()
+
+    const [, time3] = await run(
+      async () => await leanIMT.update(leanIMTLeaves - 1, commitment2)
+    )
+
+    timeValues.push(time3)
+
+    setLeanIMTTimes(timeValues.slice())
+  }, [leanIMTLeaves])
 
   return (
-    <div className="app">
-      {/* <div className="w-90 h-auto">
-        <div className="font-medium text-2xl">Insert members</div>
-        <Chart
-          options={insertConfig.options}
-          series={insertConfig.series}
-          type="line"
-          width="800"
-          height="500"
-        />
-      </div> */}
-      <div>
-        <Table data={tableInfo} />
-      </div>
-      {/* <div className="mt-10">
-        <button onClick={downloadData}>Download Function Benchmarks</button>
-      </div> */}
-      <div className="mt-10">
-        <button onClick={generateBenchmarks}>
-          Generate Function Benchmarks
-        </button>
+    <div className="flex my-10 mx-10">
+      <div className="grid grid-cols-1 gap-20 sm:grid-cols-2">
+        {/* SMT */}
+        <div className="flex flex-col gap-6 justify-end items-start">
+          <div className="text-2xl font-bold">SMT</div>
+          <div className="flex flex-col gap-4">
+            <InputNumber
+              title="Tree Depth"
+              defaultValue={10}
+              onChange={setSMTMaxLevels}
+            />
+            <InputNumber
+              title="Tree Leaves"
+              defaultValue={100}
+              onChange={setSMTLeaves}
+            />
+            <button
+              onClick={runSMTFunctions}
+              className="flex justify-center items-center cursor-pointer disabled:cursor-not-allowed space-x-3 font-medium rounded-md px-3 py-2 w-full bg-blue-200 hover:bg-blue-300 transition-colors duration-300 ease-in-out"
+            >
+              Run Functions
+            </button>
+          </div>
+          <div className="flex flex-col gap-6">
+            <div>
+              {functions.map((fn, i) => (
+                <div key={i} className="flex items-center gap-6">
+                  <div className="flex gap-6 py-2">
+                    <div className="flex font-semibold w-96">{fn}</div>{" "}
+                    <div className="font-normal">
+                      {smtTimes[i] ? `${smtTimes[i].toFixed(2)} ms` : "0 ms"}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* LeanIMT */}
+        <div className="flex flex-col gap-6 justify-end items-start">
+          <div className="text-2xl font-bold mb-14">LeanIMT</div>
+          <div className="flex flex-col gap-4">
+            <InputNumber
+              title="Tree Leaves"
+              defaultValue={100}
+              onChange={setLeanIMTLeaves}
+            />
+            <button
+              onClick={runLeanIMTFunctions}
+              className="flex justify-center items-center cursor-pointer disabled:cursor-not-allowed space-x-3 font-medium rounded-md px-3 py-2 w-full bg-blue-200 hover:bg-blue-300 transition-colors duration-300 ease-in-out"
+            >
+              Run Functions
+            </button>
+          </div>
+          <div className="flex flex-col gap-6">
+            <div>
+              {functions.map((fn, i) => (
+                <div key={i} className="flex items-center gap-6">
+                  <div className="flex gap-6 py-2">
+                    <div className="flex font-semibold w-96">{fn}</div>{" "}
+                    <div className="font-normal">
+                      {leanIMTTimes[i]
+                        ? `${leanIMTTimes[i].toFixed(2)} ms`
+                        : "0 ms"}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
