@@ -6,7 +6,7 @@ import {InternalLeanIMT, LeanIMTData} from "@zk-kit/lean-imt.sol/InternalLeanIMT
 contract LeanIMTBench {
     using InternalLeanIMT for LeanIMTData;
 
-    LeanIMTData public merkleTree;
+    LeanIMTData internal merkleTree;
 
     function insert(uint256 leaf) external returns (uint256) {
         return merkleTree._insert(leaf);
