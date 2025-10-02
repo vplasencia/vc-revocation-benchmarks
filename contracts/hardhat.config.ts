@@ -28,7 +28,9 @@ const config: HardhatUserConfig = {
   gasReporter: {
     currency: "USD",
     enabled: process.env.REPORT_GAS === "true",
-    coinmarketcap: process.env.COINMARKETCAP_API_KEY
+    coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    reportFormat: "markdown",
+    outputFile: "gas-report.md"
   }
 }
 
