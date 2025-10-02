@@ -8,12 +8,12 @@ contract LeanIMTBench {
 
     LeanIMTData internal tree;
 
-    function insert(uint256 leaf) external returns (uint256) {
-        return tree._insert(leaf);
+    function insert(uint256 leaf) external {
+        tree._insert(leaf);
     }
 
-    function insertMany(uint256[] calldata leaves) external returns (uint256) {
-        return tree._insertMany(leaves);
+    function insertMany(uint256[] calldata leaves) external {
+        tree._insertMany(leaves);
     }
 
     function update(
