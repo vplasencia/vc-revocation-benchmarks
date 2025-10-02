@@ -1,8 +1,8 @@
-import type { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
+import type { HardhatUserConfig } from "hardhat/config"
+import "@nomicfoundation/hardhat-toolbox"
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.28",
-};
+  solidity: "0.8.28"
+}
 
-export default config;
+export default config
