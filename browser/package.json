@@ -19,6 +19,7 @@
     "idb-keyval": "^6.2.2",
     "next": "15.5.3",
     "poseidon-lite": "^0.3.0",
+    "pretty-ms": "^9.3.0",
     "react": "19.1.0",
     "react-apexcharts": "^1.7.0",
     "react-dom": "19.1.0",

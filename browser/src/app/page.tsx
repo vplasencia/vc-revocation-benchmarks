@@ -12,6 +12,7 @@ import {
   Proof
 } from "@iden3/js-merkletree"
 import { Identity } from "@semaphore-protocol/identity"
+import prettyMilliseconds from "pretty-ms"
 import { run } from "@/utils/run-function"
 import InputNumber from "@/components/InputNumber"
 
@@ -166,7 +167,9 @@ export default function Home() {
                   <div className="flex gap-6 py-2">
                     <div className="flex font-semibold w-96">{fn}</div>{" "}
                     <div className="font-normal">
-                      {smtTimes[i] ? `${smtTimes[i].toFixed(2)} ms` : "0 ms"}
+                      {smtTimes[i]
+                        ? `${prettyMilliseconds(smtTimes[i])}`
+                        : "0ms"}
                     </div>
                   </div>
                 </div>
@@ -198,8 +201,8 @@ export default function Home() {
                     <div className="flex font-semibold w-96">{fn}</div>{" "}
                     <div className="font-normal">
                       {leanIMTTimes[i]
-                        ? `${leanIMTTimes[i].toFixed(2)} ms`
-                        : "0 ms"}
+                        ? `${prettyMilliseconds(leanIMTTimes[i])}`
+                        : "0ms"}
                     </div>
                   </div>
                 </div>
