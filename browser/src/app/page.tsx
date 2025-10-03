@@ -145,7 +145,7 @@ export default function Home() {
           <div className="flex flex-col gap-4">
             <InputNumber
               title="Tree Depth"
-              defaultValue={10}
+              defaultValue={20}
               onChange={setSMTMaxLevels}
             />
             <InputNumber
