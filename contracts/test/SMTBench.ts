@@ -51,7 +51,7 @@ describe("SMTBench", function () {
         SmtLib: smtAddress
       }
     })
-    const smtBench = await SMTBench.deploy(MAX_SMT_LEVELS)
+    const smtBench = await SMTBench.deploy(MAX_SMT_LEVELS - 1)
 
     return { smtBench, owner, otherAccount }
   }
@@ -76,10 +76,9 @@ describe("SMTBench", function () {
 
         const root = await smtBench.root()
 
-        const jsRoot = await jsSMT.root()
+        const jsRoot = (await jsSMT.root()).bigInt()
 
-        // await expect(root).to.equal(jsRoot)
-        await expect(root).to.equal(root)
+        await expect(root).to.equal(jsRoot)
       })
     })
   })
