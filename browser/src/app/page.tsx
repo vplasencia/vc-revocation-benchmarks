@@ -144,7 +144,7 @@ export default function Home() {
           <div className="text-2xl font-bold">SMT</div>
           <div className="flex flex-col gap-4">
             <InputNumber
-              title="Tree Depth"
+              title="Max Levels"
               defaultValue={20}
               onChange={setSMTMaxLevels}
             />
