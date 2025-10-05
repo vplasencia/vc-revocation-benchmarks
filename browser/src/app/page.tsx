@@ -138,7 +138,7 @@ export default function Home() {
 
   return (
     <div className="flex my-10 mx-10">
-      <div className="grid grid-cols-1 gap-20 sm:grid-cols-2">
+      <div className="flex flex-wrap gap-y-20 justify-around w-full">
         {/* SMT */}
         <div className="flex flex-col gap-6 justify-end items-start">
           <div className="text-2xl font-bold">SMT</div>
