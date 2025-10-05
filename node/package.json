@@ -6,6 +6,9 @@
     "leanimt": "tsx src/leanimt.ts",
     "bench:all": "tsx src/all-functions.ts",
     "insert": "tsx src/insert.ts",
+    "update": "tsx src/update.ts",
+    "generate-merkle-proof": "tsx src/generate-merkle-proof.ts",
+    "verfy-merkle-proof": "tsx src/verfy-merkle-proof.ts",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w ."
   },

@@ -6,7 +6,8 @@ const main = async () => {
   const bench = new Bench({
     name: "Merkle Tree Benchmarks",
     time: 0,
-    iterations: 100
+    iterations: 100,
+    warmup: false
   })
 
   let leanIMT: LeanIMT

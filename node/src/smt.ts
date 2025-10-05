@@ -11,7 +11,8 @@ const main = async () => {
   const bench = new Bench({
     name: "Revocation Merkle Tree Benchmarks",
     time: 0,
-    iterations: 100
+    iterations: 100,
+    warmup: false
   })
 
   let smt: Merkletree
