@@ -170,7 +170,7 @@ export default function Home() {
                     </div>
                     <div className="font-normal">
                       {smtTimes[i]
-                        ? `${prettyMilliseconds(smtTimes[i])}`
+                        ? `${prettyMilliseconds(smtTimes[i], { millisecondsDecimalDigits: 1 })}`
                         : "0ms"}
                     </div>
                   </div>
@@ -205,7 +205,7 @@ export default function Home() {
                     </div>
                     <div className="font-normal">
                       {leanIMTTimes[i]
-                        ? `${prettyMilliseconds(leanIMTTimes[i])}`
+                        ? `${prettyMilliseconds(leanIMTTimes[i], { millisecondsDecimalDigits: 1 })}`
                         : "0ms"}
                     </div>
                   </div>
