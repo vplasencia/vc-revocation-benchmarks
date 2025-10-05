@@ -165,7 +165,9 @@ export default function Home() {
               {functions.map((fn, i) => (
                 <div key={i} className="flex items-center gap-6">
                   <div className="flex gap-6 py-2">
-                    <div className="flex font-semibold w-96">{fn}</div>{" "}
+                    <div className="flex font-semibold sm:w-96 md:w-72 w-40">
+                      {fn}
+                    </div>
                     <div className="font-normal">
                       {smtTimes[i]
                         ? `${prettyMilliseconds(smtTimes[i])}`
@@ -198,7 +200,9 @@ export default function Home() {
               {functions.map((fn, i) => (
                 <div key={i} className="flex items-center gap-6">
                   <div className="flex gap-6 py-2">
-                    <div className="flex font-semibold w-96">{fn}</div>{" "}
+                    <div className="flex font-semibold sm:w-96 md:w-72 w-40">
+                      {fn}
+                    </div>
                     <div className="font-normal">
                       {leanIMTTimes[i]
                         ? `${prettyMilliseconds(leanIMTTimes[i])}`
