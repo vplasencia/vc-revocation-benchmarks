@@ -7,13 +7,19 @@
     "bench:all": "tsx src/all-functions.ts",
     "insert": "tsx src/insert.ts",
     "update": "tsx src/update.ts",
-    "generate-merkle-proof": "tsx src/generate-merkle-proof.ts",
-    "verfy-merkle-proof": "tsx src/verfy-merkle-proof.ts",
+    "generate:merkle-proof": "tsx src/generate-merkle-proof.ts",
+    "verify:merkle-proof": "tsx src/verfy-merkle-proof.ts",
+    "copy:artifacts": "tsx scripts/copy-zk-artifacts.ts",
+    "generate:zk-proof:membership": "tsx src/generate-zk-proof-membership.ts",
+    "generate:zk-proof:non-membership": "tsx src/generate-zk-proof-non-membership.ts",
+    "verify:zk-proof:membership": "tsx src/verify-zk-proof-membership.ts",
+    "verify:zk-proof:non-membership": "tsx src/verify-zk-proof-non-membership.ts",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w ."
   },
   "devDependencies": {
     "@types/node": "^24.5.0",
+    "@types/snarkjs": "^0",
     "prettier": "^3.6.2",
     "tinybench": "^5.0.1",
     "tsx": "^4.20.5",
@@ -25,6 +31,7 @@
     "@zk-kit/lean-imt": "^2.2.4",
     "idb-keyval": "^6.2.2",
     "markdown-table-ts": "^1.0.3",
-    "poseidon-lite": "^0.3.0"
+    "poseidon-lite": "^0.3.0",
+    "snarkjs": "0.7.5"
   }
 }

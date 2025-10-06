@@ -34,7 +34,7 @@ const main = async () => {
         await verifyProof(await smt.root(), smtProof, 2n, 2n)
       },
       {
-        beforeEach: async () => {
+        beforeAll: async () => {
           smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
           const size = 100
           for (let i = 0; i < size; i++) {
@@ -65,7 +65,7 @@ const main = async () => {
         await verifyProof(await smt.root(), smtProof, 2n, 2n)
       },
       {
-        beforeEach: async () => {
+        beforeAll: async () => {
           smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
           const size = 500
           for (let i = 0; i < size; i++) {
@@ -96,7 +96,7 @@ const main = async () => {
         await verifyProof(await smt.root(), smtProof, 2n, 2n)
       },
       {
-        beforeEach: async () => {
+        beforeAll: async () => {
           smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
           const size = 1000
           for (let i = 0; i < size; i++) {
@@ -127,7 +127,7 @@ const main = async () => {
         await verifyProof(await smt.root(), smtProof, 2n, 2n)
       },
       {
-        beforeEach: async () => {
+        beforeAll: async () => {
           smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
           const size = 2000
           for (let i = 0; i < size; i++) {
