@@ -29,7 +29,7 @@ const main = async () => {
 
   bench
     .add(
-      "SMT - Verify Proof 100 Members",
+      "SMT - Verify Merkle Proof 100 Members",
       async () => {
         await verifyProof(await smt.root(), smtProof, 2n, 2n)
       },
@@ -45,7 +45,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Verify Proof 100 Members",
+      "LeanIMT - Verify Merkle Proof 100 Members",
       () => {
         leanIMT.verifyProof(leanIMTProof)
       },
@@ -60,7 +60,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Verify Proof 500 Members",
+      "SMT - Verify Merkle Proof 500 Members",
       async () => {
         await verifyProof(await smt.root(), smtProof, 2n, 2n)
       },
@@ -76,7 +76,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Verify Proof 500 Members",
+      "LeanIMT - Verify Merkle Proof 500 Members",
       () => {
         leanIMT.verifyProof(leanIMTProof)
       },
@@ -91,7 +91,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Verify Proof 1000 Members",
+      "SMT - Verify Merkle Proof 1000 Members",
       async () => {
         await verifyProof(await smt.root(), smtProof, 2n, 2n)
       },
@@ -107,7 +107,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Verify Proof 1000 Members",
+      "LeanIMT - Verify Merkle Proof 1000 Members",
       () => {
         leanIMT.verifyProof(leanIMTProof)
       },
@@ -122,7 +122,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Verify Proof 2000 Members",
+      "SMT - Verify Merkle Proof 2000 Members",
       async () => {
         await verifyProof(await smt.root(), smtProof, 2n, 2n)
       },
@@ -138,7 +138,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Verify Proof 2000 Members",
+      "LeanIMT - Verify Merkle Proof 2000 Members",
       () => {
         leanIMT.verifyProof(leanIMTProof)
       },

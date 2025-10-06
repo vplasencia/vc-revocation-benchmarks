@@ -2,8 +2,8 @@
 
 import { useCallback, useState } from "react"
 import { LeanIMT, LeanIMTMerkleProof } from "@zk-kit/lean-imt"
-// import { poseidon2 } from "poseidon-lite"
-import { poseidon } from "@iden3/js-crypto"
+import { poseidon2 } from "poseidon-lite"
+// import { poseidon } from "@iden3/js-crypto"
 import {
   Merkletree,
   str2Bytes,
@@ -93,8 +93,8 @@ export default function Home() {
 
     const { commitment: commitment0 } = new Identity()
 
-    // const leanIMTHash = (a: bigint, b: bigint) => poseidon2([a, b])
-    const leanIMTHash = (a: bigint, b: bigint) => poseidon.hash([a, b])
+    const leanIMTHash = (a: bigint, b: bigint) => poseidon2([a, b])
+    // const leanIMTHash = (a: bigint, b: bigint) => poseidon.hash([a, b])
     const leanIMT = new LeanIMT(leanIMTHash)
     leanIMT.insertMany(
       Array.from({ length: leanIMTLeaves - 1 }, (_, i) => BigInt(i + 1))
@@ -137,7 +137,7 @@ export default function Home() {
   }, [leanIMTLeaves])
 
   return (
-    <div className="flex my-10 mx-10">
+    <div className="flex flex-col my-10 mx-10">
       <div className="flex flex-wrap gap-y-20 justify-around w-full">
         {/* SMT */}
         <div className="flex flex-col gap-6 justify-end items-start">

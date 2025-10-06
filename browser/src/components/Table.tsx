@@ -18,7 +18,10 @@ export default function Table({ data }: TableProps) {
         </thead>
         <tbody>
           {data.map((row, i) => (
-            <tr key={i} className="odd:bg-white even:bg-slate-50 border-b">
+            <tr
+              key={i}
+              className="odd:bg-white even:bg-slate-50 border-b border-slate-200"
+            >
               {Object.values(row).map((value: any, j) =>
                 j === 0 ? (
                   <th

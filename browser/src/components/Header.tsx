@@ -9,6 +9,12 @@ export default function Header() {
       >
         Revocation Benchmarks
       </Link>
+      <Link
+        href="/bench"
+        className="font-semibold text-blue-600 hover:text-blue-700"
+      >
+        Run Benchmarks
+      </Link>
     </header>
   )
 }

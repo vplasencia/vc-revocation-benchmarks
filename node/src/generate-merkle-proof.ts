@@ -21,7 +21,7 @@ const main = async () => {
 
   bench
     .add(
-      "SMT - Generate Proof 500 Members",
+      "SMT - Generate Merkle Proof 100 Members",
       async () => {
         await smt.generateProof(2n)
       },
@@ -36,7 +36,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate Proof 500 Members",
+      "LeanIMT - Generate Merkle Proof 100 Members",
       () => {
         leanIMT.generateProof(1)
       },
@@ -50,7 +50,36 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate Proof 1000 Members",
+      "SMT - Generate Merkle Proof 500 Members",
+      async () => {
+        await smt.generateProof(2n)
+      },
+      {
+        beforeEach: async () => {
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
+          const size = 500
+          for (let i = 0; i < size; i++) {
+            await smt.add(BigInt(i + 1), BigInt(i + 1))
+          }
+        }
+      }
+    )
+    .add(
+      "LeanIMT - Generate Merkle Proof 500 Members",
+      () => {
+        leanIMT.generateProof(1)
+      },
+      {
+        beforeAll: () => {
+          leanIMT = new LeanIMT(leanIMTHash)
+          leanIMT.insertMany(
+            Array.from({ length: 500 }, (_, i) => BigInt(i + 1))
+          )
+        }
+      }
+    )
+    .add(
+      "SMT - Generate Merkle Proof 1000 Members",
       async () => {
         await smt.generateProof(2n)
       },
@@ -65,7 +94,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate Proof 1000 Members",
+      "LeanIMT - Generate Merkle Proof 1000 Members",
       () => {
         leanIMT.generateProof(1)
       },
@@ -79,7 +108,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate Proof 2000 Members",
+      "SMT - Generate Merkle Proof 2000 Members",
       async () => {
         await smt.generateProof(2n)
       },
@@ -94,7 +123,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate Proof 2000 Members",
+      "LeanIMT - Generate Merkle Proof 2000 Members",
       () => {
         leanIMT.generateProof(1)
       },
