@@ -9,6 +9,7 @@ import { Bench, Task } from "tinybench"
 import { addComparisonColumn } from "@/utils/add-comparison-column"
 import { generateTable } from "@/utils/generate-table"
 import Table from "@/components/Table"
+import { generateMarkdown } from "@/utils/generate-markdown"
 
 export default function Benchmark() {
   const [dataTable, setDataTabe] = useState<
@@ -165,13 +166,30 @@ export default function Benchmark() {
   return (
     <div className="flex flex-col my-10 mx-10">
       <div className="flex flex-col gap-10 mt-10 justify-center items-center">
-        <button
-          onClick={generateBenchmarkTable}
-          disabled={loading}
-          className="flex justify-center items-center cursor-pointer disabled:cursor-not-allowed space-x-3 font-medium rounded-md px-3 py-2 bg-blue-200 hover:bg-blue-300 transition-colors duration-300 ease-in-out"
-        >
-          Generate Benchmark Table
-        </button>
+        <div className="flex gap-5">
+          <button
+            onClick={generateBenchmarkTable}
+            disabled={loading}
+            className="flex justify-center items-center cursor-pointer disabled:cursor-not-allowed space-x-3 font-medium rounded-md px-3 py-2 bg-blue-200 hover:bg-blue-300 transition-colors duration-300 ease-in-out"
+          >
+            Generate Benchmark Table
+          </button>
+          {dataTable.length > 0 && !loading && (
+            <button
+              onClick={() =>
+                generateMarkdown(
+                  dataTable as Record<string, string | number>[],
+                  "merkle-tree-benchmarks.md"
+                )
+              }
+              disabled={loading}
+              className="flex justify-center items-center cursor-pointer disabled:cursor-not-allowed space-x-3 font-medium rounded-md px-3 py-2 bg-blue-200 hover:bg-blue-300 transition-colors duration-300 ease-in-out"
+            >
+              Download Markdown Table
+            </button>
+          )}
+        </div>
+
         {loading && <div className="loader"></div>}
         {!loading && dataTable.length > 0 && (
           <div>

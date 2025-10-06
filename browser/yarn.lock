@@ -1509,6 +1509,7 @@ __metadata:
     eslint: "npm:^9"
     eslint-config-next: "npm:15.5.3"
     idb-keyval: "npm:^6.2.2"
+    markdown-table-ts: "npm:^1.0.3"
     next: "npm:15.5.3"
     poseidon-lite: "npm:^0.3.0"
     prettier: "npm:^3.6.2"
@@ -3104,6 +3105,13 @@ __metadata:
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.5.5"
   checksum: 10/5045467fad59ddfba6ccfb00fde6edbc0f841089f0da07d844cf513c73de289bbbf933bde16168cba2c9ef38d75ac68e1617a5ce74aae16d6f39285bda1d51c4
+  languageName: node
+  linkType: hard
+
+"markdown-table-ts@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "markdown-table-ts@npm:1.0.3"
+  checksum: 10/a4c938785420427c772188314daffce64c435d7857f2a3e7ed731c1d2c446083bf5320b36ea864a0dd10db988d0c1d577c45e0dd437293202ca3a01907846330
   languageName: node
   linkType: hard
 

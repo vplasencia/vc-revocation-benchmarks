@@ -10,6 +10,7 @@ import {
 } from "@iden3/js-merkletree"
 import { generateTable } from "utils/generate-table"
 import { addComparisonColumn } from "utils/add-comparison-column"
+import { generateMarkdown } from "utils/generate-markdown"
 
 const main = async () => {
   const bench = new Bench({
@@ -538,6 +539,7 @@ const main = async () => {
   const table = bench.table((task: Task) => generateTable(task))
   addComparisonColumn(table, bench)
   console.table(table)
+  generateMarkdown(table, "merkle-tree-benchmarks.md")
 }
 
 main()
