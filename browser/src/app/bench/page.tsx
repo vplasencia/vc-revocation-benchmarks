@@ -12,7 +12,7 @@ import Table from "@/components/Table"
 import { generateMarkdownTable } from "@/utils/generate-markdown-table"
 
 export default function Benchmark() {
-  const [dataTable, setDataTabe] = useState<
+  const [dataTable, setDataTable] = useState<
     (Record<string, string | number | undefined> | null)[]
   >([])
   const [loading, setLoading] = useState(false)
@@ -157,7 +157,7 @@ export default function Benchmark() {
       await bench.run()
       const table = bench.table((task: Task) => generateTable(task))
       addComparisonColumn(table, bench)
-      setDataTabe(table)
+      setDataTable(table)
     } finally {
       setLoading(false)
     }
