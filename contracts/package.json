@@ -5,6 +5,7 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "test:report-gas": "REPORT_GAS=true hardhat test",
+    "copy:artifacts": "tsx scripts/copy-zk-artifacts.ts",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w ."
   },
@@ -24,7 +25,9 @@
     "@types/circomlibjs": "^0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.6.2",
+    "@types/snarkjs": "^0",
     "@zk-kit/lean-imt": "2.2.4",
+    "@zk-kit/utils": "^1.4.1",
     "chai": "^4.5.0",
     "circomlibjs": "^0.1.7",
     "ethers": "^6.15.0",
@@ -33,8 +36,10 @@
     "idb-keyval": "^6.2.2",
     "poseidon-lite": "0.3.0",
     "prettier": "^3.6.2",
+    "snarkjs": "0.7.5",
     "solidity-coverage": "^0.8.16",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
     "typechain": "^8.3.2",
     "typescript": "^5.9.3"
   },

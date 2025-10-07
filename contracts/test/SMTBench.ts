@@ -1,14 +1,18 @@
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers"
 import { expect } from "chai"
 import hre from "hardhat"
-import {
-  Merkletree,
-  Proof,
-  verifyProof,
-  InMemoryDB,
-  str2Bytes
-} from "@iden3/js-merkletree"
+import { Merkletree, InMemoryDB, str2Bytes } from "@iden3/js-merkletree"
 import { poseidonContract } from "circomlibjs"
+import { groth16 } from "snarkjs"
+import { packGroth16Proof } from "@zk-kit/utils"
+
+const getWasmPath = (tree: string, depth: number): string => {
+  return `./zk-artifacts/${tree}-${depth}.wasm`
+}
+
+const getZkeyPath = (tree: string, depth: number): string => {
+  return `./zk-artifacts/${tree}-${depth}.zkey`
+}
 
 async function deployPoseidon(nInputs: number) {
   const abi = poseidonContract.generateABI(nInputs)
@@ -20,7 +24,7 @@ async function deployPoseidon(nInputs: number) {
   return poseidon
 }
 
-const MAX_SMT_LEVELS = 3
+const MAX_SMT_LEVELS = 10
 
 describe("SMTBench", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -46,12 +50,20 @@ describe("SMTBench", function () {
     const smt = await SMT.deploy()
     const smtAddress = await smt.getAddress()
 
+    // SMT Verifier
+    const SMTVerifier = await hre.ethers.getContractFactory("SMTVerifier")
+    const smtVerifier = await SMTVerifier.deploy()
+    const smtVerifierAddress = await smtVerifier.getAddress()
+
     const SMTBench = await hre.ethers.getContractFactory("SMTBench", {
       libraries: {
         SmtLib: smtAddress
       }
     })
-    const smtBench = await SMTBench.deploy(MAX_SMT_LEVELS - 1)
+    const smtBench = await SMTBench.deploy(
+      MAX_SMT_LEVELS - 1,
+      smtVerifierAddress
+    )
 
     return { smtBench, owner, otherAccount }
   }
@@ -67,7 +79,7 @@ describe("SMTBench", function () {
 
   describe("SMTBench", function () {
     describe("Insert", function () {
-      it("Insert an element in the tree", async function () {
+      it("SHould insert an element in the tree", async function () {
         const { smtBench } = await loadFixture(deploySMTBenchFixture)
 
         await jsSMT.add(BigInt(1), BigInt(1))
@@ -79,6 +91,50 @@ describe("SMTBench", function () {
         const jsRoot = (await jsSMT.root()).bigInt()
 
         await expect(root).to.equal(jsRoot)
+      })
+    })
+
+    describe("Verify ZK Proof", function () {
+      it("Should verify a ZK Proof", async function () {
+        const { smtBench } = await loadFixture(deploySMTBenchFixture)
+
+        const depth = 10
+
+        const size = 10
+        for (let i = 0; i < size; i++) {
+          await jsSMT.add(BigInt(i + 1), BigInt(i + 1))
+          await smtBench.insert(1, 1)
+        }
+        const smtCircomProof = await jsSMT.generateCircomVerifierProof(
+          2n,
+          await jsSMT.root()
+        )
+        const { proof: smtZKProof, publicSignals } = await groth16.fullProve(
+          {
+            enabled: 1, // check if roots are equal
+            fnc: 0, // 0 for membership proofs, 1 for non-membership proofs
+            root: smtCircomProof.root.string(),
+            siblings: smtCircomProof.siblings.map((s) => s.string()),
+            oldKey: smtCircomProof.oldKey.string(),
+            oldValue: smtCircomProof.oldValue.string(),
+            isOld0: smtCircomProof.isOld0 ? 1 : 0,
+            key: smtCircomProof.key.string(),
+            value: smtCircomProof.value.string()
+          },
+          getWasmPath("smt", depth),
+          getZkeyPath("smt", depth)
+        )
+
+        const zkProofPoints = packGroth16Proof(smtZKProof)
+
+        const transaction = smtBench.verifyZkProof({
+          root: (await jsSMT.root()).bigInt(),
+          points: zkProofPoints
+        })
+
+        await expect(transaction)
+          .to.emit(smtBench, "SMTProofVerified")
+          .withArgs((await jsSMT.root()).bigInt(), zkProofPoints)
       })
     })
   })

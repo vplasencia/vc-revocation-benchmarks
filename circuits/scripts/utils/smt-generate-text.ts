@@ -1,7 +1,7 @@
 import { Merkletree, InMemoryDB, str2Bytes, Hash } from "@iden3/js-merkletree"
 
 export function createCircuitCode(num: number) {
-  return `pragma circom 2.1.5;\n\ninclude "smt/smtverifier.circom";\n\ncomponent main = SMTVerifier(${num});`
+  return `pragma circom 2.1.5;\n\ninclude "smt/smtverifier.circom";\n\ncomponent main {public [root]} = SMTVerifier(${num});`
 }
 
 export async function createInput(maxDepth: number) {
