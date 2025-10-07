@@ -77,6 +77,7 @@ const main = async () => {
   }
 
   bench
+    // SMT and LeanIMT - Add Member
     .add(
       "SMT - Add Member Empty Tree",
       async () => {
@@ -219,6 +220,7 @@ const main = async () => {
         }
       }
     )
+    // SMT and LeanIMT - Update Member
     .add(
       "SMT - Update Member 128 Members",
       async () => {
@@ -339,6 +341,7 @@ const main = async () => {
         }
       }
     )
+    // SMT and LeanIMT - Generate Merkle Proof
     .add(
       "SMT - Generate Merkle Proof 128 Members",
       async () => {
@@ -459,6 +462,7 @@ const main = async () => {
         }
       }
     )
+    // SMT and LeanIMT - Verify Merkle Proof
     .add(
       "SMT - Verify Merkle Proof 128 Members",
       async () => {
@@ -587,6 +591,7 @@ const main = async () => {
         }
       }
     )
+    // SMT and LeanIMT - Generate ZK Proof of Membership
     .add(
       "SMT - Generate ZK Proof 128 Members",
       async () => {
@@ -875,8 +880,9 @@ const main = async () => {
         }
       }
     )
+    // SMT and LeanIMT - Verify ZK Proof of Membership
     .add(
-      "SMT - Generate ZK Proof 128 Members",
+      "SMT - Verify ZK Proof 128 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("smt", smtMaxDepth),
@@ -919,7 +925,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate ZK Proof 128 Members",
+      "LeanIMT - Verify ZK Proof 128 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("leanimt", leanIMTDepth),
@@ -958,7 +964,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 512 Members",
+      "SMT - Verify ZK Proof 512 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("smt", smtMaxDepth),
@@ -1001,7 +1007,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate ZK Proof 512 Members",
+      "LeanIMT - Verify ZK Proof 512 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("leanimt", leanIMTDepth),
@@ -1040,7 +1046,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 1024 Members",
+      "SMT - Verify ZK Proof 1024 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("smt", smtMaxDepth),
@@ -1083,7 +1089,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate ZK Proof 1024 Members",
+      "LeanIMT - Verify ZK Proof 1024 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("leanimt", leanIMTDepth),
@@ -1122,7 +1128,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 2048 Members",
+      "SMT - Verify ZK Proof 2048 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("smt", smtMaxDepth),
@@ -1165,7 +1171,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate ZK Proof 2048 Members",
+      "LeanIMT - Verify ZK Proof 2048 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("leanimt", leanIMTDepth),
