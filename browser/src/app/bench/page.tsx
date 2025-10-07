@@ -1,15 +1,34 @@
 "use client"
 
 import { useState } from "react"
-import { LeanIMT } from "@zk-kit/lean-imt"
+import { LeanIMT, LeanIMTMerkleProof } from "@zk-kit/lean-imt"
 import { poseidon2 } from "poseidon-lite"
 // import { poseidon } from "@iden3/js-crypto"
-import { Merkletree, str2Bytes, InMemoryDB } from "@iden3/js-merkletree"
+import {
+  Merkletree,
+  str2Bytes,
+  InMemoryDB,
+  CircomVerifierProof
+} from "@iden3/js-merkletree"
 import { Bench, Task } from "tinybench"
+import { groth16 } from "snarkjs"
 import { addComparisonColumn } from "@/utils/add-comparison-column"
 import { generateTable } from "@/utils/generate-table"
 import Table from "@/components/Table"
 import { generateMarkdownTable } from "@/utils/generate-markdown-table"
+
+/**
+ * Depth SMT tree size:
+ * 1024 members (2^10) - 12
+ */
+
+const getWasmPath = (tree: string, depth: number): string => {
+  return `/zk-artifacts/${tree}-${depth}.wasm`
+}
+
+const getZkeyPath = (tree: string, depth: number): string => {
+  return `/zk-artifacts/${tree}-${depth}.zkey`
+}
 
 export default function Benchmark() {
   const [dataTable, setDataTable] = useState<
@@ -29,81 +48,28 @@ export default function Benchmark() {
       })
 
       let leanIMT: LeanIMT
+      let leanIMTProof: LeanIMTMerkleProof
+      let leanIMTDepth: number
 
       const leanIMTHash = (a: bigint, b: bigint) => poseidon2([a, b])
 
       let smt: Merkletree
+      let smtCircomProof: CircomVerifierProof
+      let smtMaxDepth: number
 
       await new Promise(requestAnimationFrame)
 
       bench
+        // SMT and LeanIMT - Add Member
         .add(
-          "SMT - Generate Merkle Proof 100 Members",
+          "SMT - Add Member 1024 Members",
           async () => {
-            await smt.generateProof(2n)
-          },
-          {
-            beforeEach: async () => {
-              smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 9)
-              const size = 100
-              for (let i = 0; i < size; i++) {
-                await smt.add(BigInt(i + 1), BigInt(i + 1))
-              }
-            }
-          }
-        )
-        .add(
-          "LeanIMT - Generate Merkle Proof 100 Members",
-          () => {
-            leanIMT.generateProof(1)
-          },
-          {
-            beforeAll: () => {
-              leanIMT = new LeanIMT(leanIMTHash)
-              leanIMT.insertMany(
-                Array.from({ length: 100 }, (_, i) => BigInt(i + 1))
-              )
-            }
-          }
-        )
-        .add(
-          "SMT - Generate Merkle Proof 500 Members",
-          async () => {
-            await smt.generateProof(2n)
-          },
-          {
-            beforeEach: async () => {
-              smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 11)
-              const size = 500
-              for (let i = 0; i < size; i++) {
-                await smt.add(BigInt(i + 1), BigInt(i + 1))
-              }
-            }
-          }
-        )
-        .add(
-          "LeanIMT - Generate Merkle Proof 500 Members",
-          () => {
-            leanIMT.generateProof(1)
-          },
-          {
-            beforeAll: () => {
-              leanIMT = new LeanIMT(leanIMTHash)
-              leanIMT.insertMany(
-                Array.from({ length: 500 }, (_, i) => BigInt(i + 1))
-              )
-            }
-          }
-        )
-        .add(
-          "SMT - Generate Merkle Proof 1000 Members",
-          async () => {
-            await smt.generateProof(2n)
+            await smt.add(2000n, 2000n)
           },
           {
             beforeEach: async () => {
               smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 12)
-              const size = 1000
+              const size = 1024
               for (let i = 0; i < size; i++) {
                 await smt.add(BigInt(i + 1), BigInt(i + 1))
               }
@@ -111,28 +77,30 @@ export default function Benchmark() {
           }
         )
         .add(
-          "LeanIMT - Generate Merkle Proof 1000 Members",
+          "LeanIMT - Add Member 1024 Members",
           () => {
-            leanIMT.generateProof(1)
+            leanIMT.insert(2000n)
           },
           {
-            beforeAll: () => {
+            beforeEach: () => {
               leanIMT = new LeanIMT(leanIMTHash)
+              const size = 1024
               leanIMT.insertMany(
-                Array.from({ length: 1000 }, (_, i) => BigInt(i + 1))
+                Array.from({ length: size }, (_, i) => BigInt(i + 1))
               )
             }
           }
         )
+        // SMT and LeanIMT - Generate Merkle Proof
         .add(
-          "SMT - Generate Merkle Proof 2000 Members",
+          "SMT - Generate Merkle Proof 1024 Members",
           async () => {
             await smt.generateProof(2n)
           },
           {
-            beforeEach: async () => {
-              smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 13)
-              const size = 2000
+            beforeAll: async () => {
+              smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 12)
+              const size = 1024
               for (let i = 0; i < size; i++) {
                 await smt.add(BigInt(i + 1), BigInt(i + 1))
               }
@@ -140,16 +108,90 @@ export default function Benchmark() {
           }
         )
         .add(
-          "LeanIMT - Generate Merkle Proof 2000 Members",
+          "LeanIMT - Generate Merkle Proof 1024 Members",
           () => {
             leanIMT.generateProof(1)
           },
           {
             beforeAll: () => {
               leanIMT = new LeanIMT(leanIMTHash)
+              const size = 1024
               leanIMT.insertMany(
-                Array.from({ length: 2000 }, (_, i) => BigInt(i + 1))
+                Array.from({ length: size }, (_, i) => BigInt(i + 1))
               )
+            }
+          }
+        )
+        // SMT and LeanIMT - Generate ZK Proof of Membership
+        .add(
+          "SMT - Generate ZK Proof 1024 Members",
+          async () => {
+            await groth16.fullProve(
+              {
+                enabled: 1,
+                fnc: 0, // 0 for membership proofs, 1 for non-membership proofs
+                root: smtCircomProof.root.string(),
+                siblings: smtCircomProof.siblings.map((s) => s.string()),
+                oldKey: smtCircomProof.oldKey.string(),
+                oldValue: smtCircomProof.oldValue.string(),
+                isOld0: smtCircomProof.isOld0 ? 1 : 0,
+                key: smtCircomProof.key.string(),
+                value: smtCircomProof.value.string()
+              },
+              getWasmPath("smt", smtMaxDepth),
+              getZkeyPath("smt", smtMaxDepth)
+            )
+          },
+          {
+            beforeAll: async () => {
+              smtMaxDepth = 12
+              smt = new Merkletree(
+                new InMemoryDB(str2Bytes("Tree")),
+                true,
+                smtMaxDepth
+              )
+              const size = 1024
+              for (let i = 0; i < size; i++) {
+                await smt.add(BigInt(i + 1), BigInt(i + 1))
+              }
+              smtCircomProof = await smt.generateCircomVerifierProof(
+                2n,
+                await smt.root()
+              )
+            }
+          }
+        )
+        .add(
+          "LeanIMT - Generate ZK Proof 1024 Members",
+          async () => {
+            await groth16.fullProve(
+              {
+                leaf: 2n,
+                depth: leanIMTDepth,
+                index: leanIMTProof.index,
+                siblings: leanIMTProof.siblings
+              },
+              getWasmPath("leanimt", leanIMTDepth),
+              getZkeyPath("leanimt", leanIMTDepth)
+            )
+          },
+          {
+            beforeAll: () => {
+              leanIMT = new LeanIMT(leanIMTHash)
+              const size = 1024
+              leanIMT.insertMany(
+                Array.from({ length: size }, (_, i) => BigInt(i + 1))
+              )
+              leanIMTProof = leanIMT.generateProof(1)
+              leanIMTDepth =
+                leanIMTProof.siblings.length !== 0
+                  ? leanIMTProof.siblings.length
+                  : 1
+              for (let i = 0; i < leanIMT.depth; i += 1) {
+                if (leanIMTProof.siblings[i] === undefined) {
+                  leanIMTProof.siblings[i] = 0n
+                }
+              }
             }
           }
         )
@@ -179,7 +221,7 @@ export default function Benchmark() {
               onClick={() =>
                 generateMarkdownTable(
                   dataTable as Record<string, string | number>[],
-                  "merkle-tree-benchmarks.md"
+                  "merkle-tree-benchmarks-browser.md"
                 )
               }
               disabled={loading}

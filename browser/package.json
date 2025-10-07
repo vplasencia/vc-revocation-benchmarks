@@ -24,6 +24,7 @@
     "react": "19.1.0",
     "react-apexcharts": "^1.7.0",
     "react-dom": "19.1.0",
+    "snarkjs": "0.7.5",
     "tinybench": "^5.0.1"
   },
   "devDependencies": {
@@ -32,6 +33,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/snarkjs": "^0",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "prettier": "^3.6.2",
