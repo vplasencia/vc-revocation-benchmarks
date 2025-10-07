@@ -8,7 +8,6 @@ import {
   CircomVerifierProof
 } from "@iden3/js-merkletree"
 import { groth16 } from "snarkjs"
-import "ffjavascript"
 import { generateTable } from "utils/generate-table"
 import { addComparisonColumn } from "utils/add-comparison-column"
 
