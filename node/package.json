@@ -14,6 +14,7 @@
     "generate:zk-proof:non-membership": "tsx src/generate-zk-proof-non-membership.ts",
     "verify:zk-proof:membership": "tsx src/verify-zk-proof-membership.ts",
     "verify:zk-proof:non-membership": "tsx src/verify-zk-proof-non-membership.ts",
+    "zk-artifact-size": "tsx src/zk-artifact-size.ts",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w ."
   },
@@ -29,6 +30,7 @@
     "@iden3/js-crypto": "^1.3.1",
     "@iden3/js-merkletree": "^1.5.0",
     "@zk-kit/lean-imt": "^2.2.4",
+    "filesize": "^11.0.13",
     "idb-keyval": "^6.2.2",
     "markdown-table-ts": "^1.0.3",
     "poseidon-lite": "^0.3.0",

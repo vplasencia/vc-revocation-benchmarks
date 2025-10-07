@@ -849,6 +849,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"filesize@npm:^11.0.13":
+  version: 11.0.13
+  resolution: "filesize@npm:11.0.13"
+  checksum: 10/3797c6f6981d5d35ae224121e86d97ea942847b95b67170266ca442e2fa600f0bb9f99687a8b692d2275e964cf912bd88e148a6ddffb7b6b1d813076d40370eb
+  languageName: node
+  linkType: hard
+
 "foreground-child@npm:^3.1.0":
   version: 3.3.1
   resolution: "foreground-child@npm:3.3.1"
@@ -1258,6 +1265,7 @@ __metadata:
     "@types/node": "npm:^24.5.0"
     "@types/snarkjs": "npm:^0"
     "@zk-kit/lean-imt": "npm:^2.2.4"
+    filesize: "npm:^11.0.13"
     idb-keyval: "npm:^6.2.2"
     markdown-table-ts: "npm:^1.0.3"
     poseidon-lite: "npm:^0.3.0"
