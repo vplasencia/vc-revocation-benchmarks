@@ -8,6 +8,7 @@ import {
 import { groth16, type Groth16Proof, type PublicSignals } from "snarkjs"
 import { readFileSync } from "fs"
 import { generateTable } from "utils/generate-table"
+import { generateMarkdown } from "utils/generate-markdown"
 
 /**
  * Depths per SMT tree size:
@@ -35,7 +36,7 @@ const main = async () => {
   const bench = new Bench({
     name: "Merkle Tree Benchmarks",
     time: 0,
-    iterations: 10,
+    iterations: 30,
     warmup: false
   })
 
@@ -226,6 +227,8 @@ const main = async () => {
   const table = bench.table((task: Task) => generateTable(task))
 
   console.table(table)
+
+  generateMarkdown(table, "verify-zk-proof-non-membership.md")
 }
 
 main()

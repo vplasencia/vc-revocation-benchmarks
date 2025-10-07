@@ -8,6 +8,7 @@ import {
 import { groth16 } from "snarkjs"
 import "ffjavascript"
 import { generateTable } from "utils/generate-table"
+import { generateMarkdown } from "utils/generate-markdown"
 
 /**
  * Depths per SMT tree size:
@@ -29,7 +30,7 @@ const main = async () => {
   const bench = new Bench({
     name: "Merkle Tree Benchmarks",
     time: 0,
-    iterations: 10,
+    iterations: 30,
     warmup: false
   })
 
@@ -196,6 +197,8 @@ const main = async () => {
   const table = bench.table((task: Task) => generateTable(task))
 
   console.table(table)
+
+  generateMarkdown(table, "generate-zk-proof-non-membership.md")
 }
 
 main()
