@@ -8,7 +8,7 @@ import {
 import { groth16, type Groth16Proof, type PublicSignals } from "snarkjs"
 import { readFileSync } from "fs"
 import { generateTable } from "utils/generate-table"
-import { generateMarkdown } from "utils/generate-markdown"
+import { generateMarkdownTable } from "utils/generate-markdown-table"
 
 /**
  * Depths per SMT tree size:
@@ -228,7 +228,7 @@ const main = async () => {
 
   console.table(table)
 
-  generateMarkdown(table, "verify-zk-proof-non-membership.md")
+  generateMarkdownTable(table, "verify-zk-proof-non-membership.md")
 }
 
 main()

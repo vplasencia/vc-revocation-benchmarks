@@ -8,7 +8,7 @@ import {
 import { groth16 } from "snarkjs"
 import "ffjavascript"
 import { generateTable } from "utils/generate-table"
-import { generateMarkdown } from "utils/generate-markdown"
+import { generateMarkdownTable } from "utils/generate-markdown-table"
 
 /**
  * Depths per SMT tree size:
@@ -198,7 +198,7 @@ const main = async () => {
 
   console.table(table)
 
-  generateMarkdown(table, "generate-zk-proof-non-membership.md")
+  generateMarkdownTable(table, "generate-zk-proof-non-membership.md")
 }
 
 main()

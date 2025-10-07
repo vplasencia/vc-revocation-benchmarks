@@ -1,6 +1,6 @@
 import fs from "fs"
 import { filesize } from "filesize"
-import { generateMarkdown } from "utils/generate-markdown"
+import { generateMarkdownTable } from "utils/generate-markdown-table"
 
 function getFileSizeSync(filePath: string): number {
   const stats = fs.statSync(filePath)
@@ -46,7 +46,7 @@ const main = async () => {
   const table = generateTable()
 
   console.table(table)
-  generateMarkdown(table, "zk-artifact-size.md")
+  generateMarkdownTable(table, "zk-artifact-size.md")
 }
 
 main()

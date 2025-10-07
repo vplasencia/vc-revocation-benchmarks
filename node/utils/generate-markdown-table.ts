@@ -1,8 +1,8 @@
 import { getMarkdownTable } from "markdown-table-ts"
-import { writeFileSync } from "fs"
+import { writeFileSync, mkdirSync, existsSync } from "fs"
 import { resolve } from "path"
 
-export function generateMarkdown(table: any, filename = "table.md"): void {
+export function generateMarkdownTable(table: any, filename = "table.md"): void {
   const functions = Object.keys(table[0])
   const rows = table.map((obj: any) => functions.map((k) => String(obj[k])))
   const tableMarkdown = getMarkdownTable({
@@ -12,8 +12,14 @@ export function generateMarkdown(table: any, filename = "table.md"): void {
     }
   })
 
-  // Resolve file path
-  const filePath = resolve(process.cwd(), filename)
+  // Ensure the "tables" directory exists
+  const tablesDir = resolve(process.cwd(), "tables")
+  if (!existsSync(tablesDir)) {
+    mkdirSync(tablesDir)
+  }
+
+  // Resolve file path inside "tables" folder
+  const filePath = resolve(tablesDir, filename)
 
   // Always overwrite the file with new content
   const content = `# Generated Table\n\n${tableMarkdown}\n`

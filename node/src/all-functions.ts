@@ -13,7 +13,7 @@ import { groth16, type Groth16Proof, type PublicSignals } from "snarkjs"
 import { readFileSync } from "fs"
 import { generateTable } from "utils/generate-table"
 import { addComparisonColumn } from "utils/add-comparison-column"
-import { generateMarkdown } from "utils/generate-markdown"
+import { generateMarkdownTable } from "utils/generate-markdown-table"
 
 const getWasmPath = (tree: string, depth: number): string => {
   return `./artifacts/${tree}-${depth}.wasm`
@@ -1215,7 +1215,7 @@ const main = async () => {
   const table = bench.table((task: Task) => generateTable(task))
   addComparisonColumn(table, bench)
   console.table(table)
-  generateMarkdown(table, "merkle-tree-benchmarks.md")
+  generateMarkdownTable(table, "merkle-tree-benchmarks.md")
 }
 
 main()

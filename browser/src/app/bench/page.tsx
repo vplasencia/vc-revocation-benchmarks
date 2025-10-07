@@ -9,7 +9,7 @@ import { Bench, Task } from "tinybench"
 import { addComparisonColumn } from "@/utils/add-comparison-column"
 import { generateTable } from "@/utils/generate-table"
 import Table from "@/components/Table"
-import { generateMarkdown } from "@/utils/generate-markdown"
+import { generateMarkdownTable } from "@/utils/generate-markdown-table"
 
 export default function Benchmark() {
   const [dataTable, setDataTabe] = useState<
@@ -177,7 +177,7 @@ export default function Benchmark() {
           {dataTable.length > 0 && !loading && (
             <button
               onClick={() =>
-                generateMarkdown(
+                generateMarkdownTable(
                   dataTable as Record<string, string | number>[],
                   "merkle-tree-benchmarks.md"
                 )

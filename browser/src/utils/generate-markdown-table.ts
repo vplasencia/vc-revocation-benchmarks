@@ -10,7 +10,7 @@ const downloadData = async (content: string, filename: string) => {
   document.body.removeChild(link)
 }
 
-export async function generateMarkdown(
+export async function generateMarkdownTable(
   table: Record<string, string | number>[],
   filename = "table.md"
 ): Promise<void> {
