@@ -5,6 +5,14 @@ import { Merkletree, InMemoryDB, str2Bytes } from "@iden3/js-merkletree"
 import { generateTable } from "utils/generate-table"
 import { addComparisonColumn } from "utils/add-comparison-column"
 
+/**
+ * Depths per SMT tree size:
+ * 128 members (2^7) - 9
+ * 512 members (2^9) - 11
+ * 1024 members (2^10) - 12
+ * 2048 members (2^11) - 13
+ */
+
 const main = async () => {
   const bench = new Bench({
     name: "Merkle Tree Benchmarks",
@@ -21,14 +29,14 @@ const main = async () => {
 
   bench
     .add(
-      "SMT - Generate Merkle Proof 100 Members",
+      "SMT - Generate Merkle Proof 128 Members",
       async () => {
         await smt.generateProof(2n)
       },
       {
         beforeAll: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
-          const size = 100
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 9)
+          const size = 128
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -36,28 +44,29 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate Merkle Proof 100 Members",
+      "LeanIMT - Generate Merkle Proof 128 Members",
       () => {
         leanIMT.generateProof(1)
       },
       {
         beforeAll: () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 128
           leanIMT.insertMany(
-            Array.from({ length: 100 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
         }
       }
     )
     .add(
-      "SMT - Generate Merkle Proof 500 Members",
+      "SMT - Generate Merkle Proof 512 Members",
       async () => {
         await smt.generateProof(2n)
       },
       {
         beforeAll: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
-          const size = 500
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 11)
+          const size = 512
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -65,28 +74,29 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate Merkle Proof 500 Members",
+      "LeanIMT - Generate Merkle Proof 512 Members",
       () => {
         leanIMT.generateProof(1)
       },
       {
         beforeAll: () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 512
           leanIMT.insertMany(
-            Array.from({ length: 500 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
         }
       }
     )
     .add(
-      "SMT - Generate Merkle Proof 1000 Members",
+      "SMT - Generate Merkle Proof 1024 Members",
       async () => {
         await smt.generateProof(2n)
       },
       {
         beforeAll: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
-          const size = 1000
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 12)
+          const size = 1024
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -94,28 +104,29 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate Merkle Proof 1000 Members",
+      "LeanIMT - Generate Merkle Proof 1024 Members",
       () => {
         leanIMT.generateProof(1)
       },
       {
         beforeAll: () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 1024
           leanIMT.insertMany(
-            Array.from({ length: 1000 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
         }
       }
     )
     .add(
-      "SMT - Generate Merkle Proof 2000 Members",
+      "SMT - Generate Merkle Proof 2048 Members",
       async () => {
         await smt.generateProof(2n)
       },
       {
         beforeAll: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
-          const size = 2000
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 13)
+          const size = 2048
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -123,15 +134,16 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate Merkle Proof 2000 Members",
+      "LeanIMT - Generate Merkle Proof 2048 Members",
       () => {
         leanIMT.generateProof(1)
       },
       {
         beforeAll: () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 2048
           leanIMT.insertMany(
-            Array.from({ length: 2000 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
         }
       }

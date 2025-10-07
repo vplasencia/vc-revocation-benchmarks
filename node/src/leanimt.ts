@@ -25,8 +25,9 @@ const main = async () => {
       {
         beforeEach: () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 10
           leanIMT.insertMany(
-            Array.from({ length: 10 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
         }
       }
@@ -39,8 +40,9 @@ const main = async () => {
       {
         beforeEach: () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 10
           leanIMT.insertMany(
-            Array.from({ length: 10 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
         }
       }
@@ -53,8 +55,9 @@ const main = async () => {
       {
         beforeAll: () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 10
           leanIMT.insertMany(
-            Array.from({ length: 10 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
         }
       }
@@ -67,8 +70,9 @@ const main = async () => {
       {
         beforeAll: () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 10
           leanIMT.insertMany(
-            Array.from({ length: 10 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
           leanIMTProof = leanIMT.generateProof(0)
         }

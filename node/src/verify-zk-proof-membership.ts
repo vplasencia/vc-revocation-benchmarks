@@ -14,10 +14,10 @@ import { addComparisonColumn } from "utils/add-comparison-column"
 
 /**
  * Depths per SMT tree size:
- * 100 members - 9
- * 500 members - 11
- * 1000 members - 12
- * 2000 members - 13
+ * 128 members (2^7) - 9
+ * 512 members (2^9) - 11
+ * 1024 members (2^10) - 12
+ * 2048 members (2^11) - 13
  */
 
 const getWasmPath = (tree: string, depth: number): string => {
@@ -62,7 +62,7 @@ const main = async () => {
 
   bench
     .add(
-      "SMT - Generate ZK Proof 100 Members",
+      "SMT - Generate ZK Proof 128 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("smt", smtMaxDepth),
@@ -78,7 +78,7 @@ const main = async () => {
             true,
             smtMaxDepth
           )
-          const size = 100
+          const size = 128
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -105,7 +105,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate ZK Proof 100 Members",
+      "LeanIMT - Generate ZK Proof 128 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("leanimt", leanIMTDepth),
@@ -116,8 +116,9 @@ const main = async () => {
       {
         beforeAll: async () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 128
           leanIMT.insertMany(
-            Array.from({ length: 100 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
           leanIMTProof = leanIMT.generateProof(1)
           leanIMTDepth =
@@ -143,7 +144,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 500 Members",
+      "SMT - Generate ZK Proof 512 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("smt", smtMaxDepth),
@@ -159,7 +160,7 @@ const main = async () => {
             true,
             smtMaxDepth
           )
-          const size = 500
+          const size = 512
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -186,7 +187,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate ZK Proof 500 Members",
+      "LeanIMT - Generate ZK Proof 512 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("leanimt", leanIMTDepth),
@@ -197,8 +198,9 @@ const main = async () => {
       {
         beforeAll: async () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 512
           leanIMT.insertMany(
-            Array.from({ length: 500 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
           leanIMTProof = leanIMT.generateProof(1)
           leanIMTDepth =
@@ -224,7 +226,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 1000 Members",
+      "SMT - Generate ZK Proof 1024 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("smt", smtMaxDepth),
@@ -240,7 +242,7 @@ const main = async () => {
             true,
             smtMaxDepth
           )
-          const size = 1000
+          const size = 1024
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -267,7 +269,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate ZK Proof 1000 Members",
+      "LeanIMT - Generate ZK Proof 1024 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("leanimt", leanIMTDepth),
@@ -278,8 +280,9 @@ const main = async () => {
       {
         beforeAll: async () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 1024
           leanIMT.insertMany(
-            Array.from({ length: 1000 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
           leanIMTProof = leanIMT.generateProof(1)
           leanIMTDepth =
@@ -305,7 +308,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 2000 Members",
+      "SMT - Generate ZK Proof 2048 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("smt", smtMaxDepth),
@@ -321,7 +324,7 @@ const main = async () => {
             true,
             smtMaxDepth
           )
-          const size = 2000
+          const size = 2048
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -348,7 +351,7 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Generate ZK Proof 2000 Members",
+      "LeanIMT - Generate ZK Proof 2048 Members",
       async () => {
         await groth16.verify(
           getVerificationKey("leanimt", leanIMTDepth),
@@ -359,8 +362,9 @@ const main = async () => {
       {
         beforeAll: async () => {
           leanIMT = new LeanIMT(leanIMTHash)
+          const size = 2048
           leanIMT.insertMany(
-            Array.from({ length: 2000 }, (_, i) => BigInt(i + 1))
+            Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
           leanIMTProof = leanIMT.generateProof(1)
           leanIMTDepth =

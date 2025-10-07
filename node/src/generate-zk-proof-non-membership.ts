@@ -11,10 +11,10 @@ import { generateTable } from "utils/generate-table"
 
 /**
  * Depths per SMT tree size:
- * 100 members - 9
- * 500 members - 11
- * 1000 members - 12
- * 2000 members - 13
+ * 128 members (2^7) - 9
+ * 512 members (2^9) - 11
+ * 1024 members (2^10) - 12
+ * 2048 members (2^11) - 13
  */
 
 const getWasmPath = (tree: string, depth: number): string => {
@@ -39,7 +39,7 @@ const main = async () => {
 
   bench
     .add(
-      "SMT - Generate ZK Proof 100 Members",
+      "SMT - Generate ZK Proof 128 Members",
       async () => {
         await groth16.fullProve(
           {
@@ -65,7 +65,7 @@ const main = async () => {
             true,
             smtMaxDepth
           )
-          const size = 100
+          const size = 128
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -77,7 +77,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 500 Members",
+      "SMT - Generate ZK Proof 512 Members",
       async () => {
         await groth16.fullProve(
           {
@@ -103,7 +103,7 @@ const main = async () => {
             true,
             smtMaxDepth
           )
-          const size = 500
+          const size = 512
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -115,7 +115,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 1000 Members",
+      "SMT - Generate ZK Proof 1024 Members",
       async () => {
         await groth16.fullProve(
           {
@@ -141,7 +141,7 @@ const main = async () => {
             true,
             smtMaxDepth
           )
-          const size = 1000
+          const size = 1024
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -153,7 +153,7 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Generate ZK Proof 2000 Members",
+      "SMT - Generate ZK Proof 2048 Members",
       async () => {
         await groth16.fullProve(
           {
@@ -179,7 +179,7 @@ const main = async () => {
             true,
             smtMaxDepth
           )
-          const size = 2000
+          const size = 2048
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }

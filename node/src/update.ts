@@ -5,6 +5,14 @@ import { Merkletree, InMemoryDB, str2Bytes } from "@iden3/js-merkletree"
 import { generateTable } from "utils/generate-table"
 import { addComparisonColumn } from "utils/add-comparison-column"
 
+/**
+ * Depths per SMT tree size:
+ * 128 members (2^7) - 9
+ * 512 members (2^9) - 11
+ * 1024 members (2^10) - 12
+ * 2048 members (2^11) - 13
+ */
+
 const main = async () => {
   const bench = new Bench({
     name: "Merkle Tree Benchmarks",
@@ -21,14 +29,14 @@ const main = async () => {
 
   bench
     .add(
-      "SMT - Update Member 100 Members",
+      "SMT - Update Member 128 Members",
       async () => {
         await smt.update(1n, 200n)
       },
       {
         beforeEach: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
-          const size = 100
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 9)
+          const size = 128
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -36,14 +44,14 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Update Member 100 Members",
+      "LeanIMT - Update Member 128 Members",
       () => {
         leanIMT.update(1, 200n)
       },
       {
         beforeEach: () => {
           leanIMT = new LeanIMT(leanIMTHash)
-          const size = 100
+          const size = 128
           leanIMT.insertMany(
             Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
@@ -51,14 +59,14 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Update Member 500 Members",
+      "SMT - Update Member 512 Members",
       async () => {
         await smt.update(1n, 200n)
       },
       {
         beforeEach: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
-          const size = 500
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 11)
+          const size = 512
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -66,14 +74,14 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Update Member 500 Members",
+      "LeanIMT - Update Member 512 Members",
       () => {
         leanIMT.update(1, 200n)
       },
       {
         beforeEach: () => {
           leanIMT = new LeanIMT(leanIMTHash)
-          const size = 500
+          const size = 512
           leanIMT.insertMany(
             Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
@@ -81,14 +89,14 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Update Member 1000 Members",
+      "SMT - Update Member 1024 Members",
       async () => {
         await smt.update(1n, 200n)
       },
       {
         beforeEach: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
-          const size = 1000
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 12)
+          const size = 1024
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -96,14 +104,14 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Update Member 1000 Members",
+      "LeanIMT - Update Member 1024 Members",
       () => {
         leanIMT.update(1, 200n)
       },
       {
         beforeEach: () => {
           leanIMT = new LeanIMT(leanIMTHash)
-          const size = 1000
+          const size = 1024
           leanIMT.insertMany(
             Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )
@@ -111,14 +119,14 @@ const main = async () => {
       }
     )
     .add(
-      "SMT - Update Member 2000 Members",
+      "SMT - Update Member 2048 Members",
       async () => {
         await smt.update(1n, 200n)
       },
       {
         beforeEach: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 20)
-          const size = 2000
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 13)
+          const size = 2048
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
           }
@@ -126,14 +134,14 @@ const main = async () => {
       }
     )
     .add(
-      "LeanIMT - Update Member 2000 Members",
+      "LeanIMT - Update Member 2048 Members",
       () => {
         leanIMT.update(1, 200n)
       },
       {
         beforeEach: () => {
           leanIMT = new LeanIMT(leanIMTHash)
-          const size = 2000
+          const size = 2048
           leanIMT.insertMany(
             Array.from({ length: size }, (_, i) => BigInt(i + 1))
           )

@@ -27,7 +27,7 @@ const main = async () => {
       },
       {
         beforeEach: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 140)
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 10)
           const size = 10
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
@@ -42,7 +42,7 @@ const main = async () => {
       },
       {
         beforeEach: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 140)
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 10)
           const size = 10
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
@@ -57,7 +57,7 @@ const main = async () => {
       },
       {
         beforeAll: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 140)
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 10)
           const size = 10
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
@@ -72,7 +72,7 @@ const main = async () => {
       },
       {
         beforeAll: async () => {
-          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 140)
+          smt = new Merkletree(new InMemoryDB(str2Bytes("Tree")), true, 10)
           const size = 10
           for (let i = 0; i < size; i++) {
             await smt.add(BigInt(i + 1), BigInt(i + 1))
