@@ -23,3 +23,7 @@ yarn-error.log*
 
 # ptau files
 /ptau
+
+# Python
+__pycache__
+.venv

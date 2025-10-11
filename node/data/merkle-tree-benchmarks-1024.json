@@ -1,0 +1,24 @@
+[
+  { "Function": "Insert Member", "SMT (ms)": 2.73707, "LeanIMT (ms)": 0.14754 },
+  { "Function": "Update Member", "SMT (ms)": 4.46544, "LeanIMT (ms)": 1.38404 },
+  {
+    "Function": "Generate Merkle Proof",
+    "SMT (ms)": 0.07928,
+    "LeanIMT (ms)": 0.00404
+  },
+  {
+    "Function": "Verify Merkle Proof",
+    "SMT (ms)": 1.99952,
+    "LeanIMT (ms)": 1.32906
+  },
+  {
+    "Function": "Generate ZK Proof",
+    "SMT (ms)": 315.9678,
+    "LeanIMT (ms)": 208.55884
+  },
+  {
+    "Function": "Verify ZK Proof",
+    "SMT (ms)": 8.78042,
+    "LeanIMT (ms)": 8.85046
+  }
+]

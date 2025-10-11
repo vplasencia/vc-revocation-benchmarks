@@ -21,3 +21,7 @@ node_modules
 
 # ZK Artifacts
 artifacts
+
+# Python
+__pycache__
+.venv
