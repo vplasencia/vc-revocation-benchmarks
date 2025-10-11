@@ -39,18 +39,6 @@ contract LeanIMTBench {
         tree._insert(leaf);
     }
 
-    function insertMany(uint256[] calldata leaves) external {
-        tree._insertMany(leaves);
-    }
-
-    function update(
-        uint256 oldLeaf,
-        uint256 newLeaf,
-        uint256[] calldata merkleProofSiblings
-    ) external {
-        tree._update(oldLeaf, newLeaf, merkleProofSiblings);
-    }
-
     function verifyZkProof(LeanIMTProof calldata proof) public {
         if (!verifier.verifyProof(
             [proof.points[0], proof.points[1]],

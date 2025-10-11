@@ -63,25 +63,6 @@ describe("LeanIMTBench", function () {
       })
     })
 
-    describe("Update", function () {
-      it("SHould update an element in the tree", async function () {
-        const { leanIMTBench } = await loadFixture(deployLeanIMTBenchFixture)
-
-        await leanIMTBench.insertMany([1])
-
-        jsLeanIMT.insert(BigInt(1))
-        jsLeanIMT.update(0, BigInt(2))
-
-        const { siblings } = jsLeanIMT.generateProof(0)
-
-        await leanIMTBench.update(1, 2, siblings)
-
-        const root = await leanIMTBench.root()
-
-        expect(root).to.equal(jsLeanIMT.root)
-      })
-    })
-
     describe("Verify ZK Proof", function () {
       it("Should verify a ZK Proof", async function () {
         const { leanIMTBench } = await loadFixture(deployLeanIMTBenchFixture)
@@ -92,9 +73,8 @@ describe("LeanIMTBench", function () {
 
         for (let i = 0; i < size; i++) {
           await leanIMTBench.insert(BigInt(i + 1))
+          jsLeanIMT.insert(BigInt(i + 1))
         }
-
-        jsLeanIMT.insertMany([1n, 2n, 3n, 4n, 5n])
 
         const merkleProof = jsLeanIMT.generateProof(1)
 
