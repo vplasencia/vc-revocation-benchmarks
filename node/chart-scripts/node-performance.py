@@ -14,8 +14,8 @@ plt.figure(figsize=(9, 5))
 bar_width = 0.35
 x = range(len(functions))
 
-plt.bar(x, smt_times, width=bar_width, label="SMT", color="#3b82f6")
-plt.bar([i + bar_width for i in x], leanimt_times, width=bar_width, label="LeanIMT", color="#22c55e")
+plt.bar(x, leanimt_times, width=bar_width, label="LeanIMT", color="#22c55e")
+plt.bar([i + bar_width for i in x], smt_times, width=bar_width, label="SMT", color="#3b82f6")
 
 # Logarithmic scale to show wide range of values
 plt.yscale("log")
