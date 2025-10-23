@@ -5,14 +5,14 @@
 |   **◯**    | Execution gas for this method does not include intrinsic gas overhead                    |
 |   **△**    | Cost was non-zero but below the precision setting for the currency display (see options) |
 
-|                        |     Min |     Max |     Avg | Calls | usd avg |
-| :--------------------- | ------: | ------: | ------: | ----: | ------: |
-| **LeanIMTBench**       |         |         |         |       |         |
-|        *insert*        |  90,671 | 160,447 | 124,400 |    11 |       - |
-|        *verifyZkProof* |       - |       - | 224,856 |     2 |       - |
-| **SMTBench**           |         |         |         |       |         |
-|        *insert*        | 191,802 | 278,645 | 207,592 |    11 |       - |
-|        *verifyZkProof* |       - |       - | 224,932 |     2 |       - |
+|                        |     Min |       Max |     Avg | Calls | usd avg |
+| :--------------------- | ------: | --------: | ------: | ----: | ------: |
+| **LeanIMTBench**       |         |           |         |       |         |
+|        *insert*        |  90,671 |   266,978 | 176,167 |   110 |       - |
+|        *verifyZkProof* |       - |         - | 224,856 |     2 |       - |
+| **SMTBench**           |         |           |         |       |         |
+|        *insert*        | 191,802 | 1,150,514 | 933,357 |   110 |       - |
+|        *verifyZkProof* |       - |         - | 224,932 |     2 |       - |
 
 ## Deployments
 

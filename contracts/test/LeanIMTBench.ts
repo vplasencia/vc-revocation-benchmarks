@@ -53,9 +53,12 @@ describe("LeanIMTBench", function () {
       it("Should insert an element in the tree", async function () {
         const { leanIMTBench } = await loadFixture(deployLeanIMTBenchFixture)
 
-        jsLeanIMT.insert(BigInt(1))
+        const size = 100
 
-        await leanIMTBench.insert(1)
+        for (let i = 0; i < size; i++) {
+          jsLeanIMT.insert(BigInt(i + 1))
+          await leanIMTBench.insert(i + 1)
+        }
 
         const root = await leanIMTBench.root()
 

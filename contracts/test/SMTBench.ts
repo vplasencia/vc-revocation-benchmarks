@@ -82,9 +82,12 @@ describe("SMTBench", function () {
       it("Should insert an element in the tree", async function () {
         const { smtBench } = await loadFixture(deploySMTBenchFixture)
 
-        await jsSMT.add(BigInt(1), BigInt(1))
+        const size = 100
 
-        await smtBench.insert(1, 1)
+        for (let i = 0; i < size; i++) {
+          await jsSMT.add(BigInt(i + 1), BigInt(i + 1))
+          await smtBench.insert(i + 1, i + 1)
+        }
 
         const root = await smtBench.root()
 
