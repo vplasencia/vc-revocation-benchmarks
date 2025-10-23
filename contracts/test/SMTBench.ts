@@ -103,7 +103,7 @@ describe("SMTBench", function () {
 
         const depth = 10
 
-        const size = 10
+        const size = 100
 
         for (let i = 0; i < size; i++) {
           await jsSMT.add(BigInt(i + 1), BigInt(i + 1))

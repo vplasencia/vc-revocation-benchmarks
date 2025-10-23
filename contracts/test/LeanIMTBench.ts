@@ -72,7 +72,7 @@ describe("LeanIMTBench", function () {
 
         const depth = 10
 
-        const size = 10
+        const size = 100
 
         for (let i = 0; i < size; i++) {
           await leanIMTBench.insert(BigInt(i + 1))
