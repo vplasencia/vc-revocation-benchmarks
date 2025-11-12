@@ -42,15 +42,20 @@ export default function Home() {
       smtMaxLevels
     )
 
+    const members = Array.from({ length: smtLeaves - 1 }, (_, i) => ({
+      key: BigInt(i + 1),
+      value: BigInt(i + 1)
+    }))
+
+    members.push({ key: commitment0, value: commitment0 })
+
     const [, time0] = await run(async () => {
-      for (let i = 0; i < smtLeaves - 1; i++) {
-        await smt.add(BigInt(i + 1), BigInt(i + 1))
+      for (let i = 0; i < members.length; i++) {
+        await smt.add(members[i].key, members[i].value)
       }
     })
     timeValues.push(time0)
     setSMTTimes(timeValues.slice())
-
-    await smt.add(commitment0, commitment0)
 
     const [proof, time1] = await run(
       async () => await smt.generateProof(commitment0)
@@ -104,17 +109,17 @@ export default function Home() {
     // const leanIMTHash = (a: bigint, b: bigint) => poseidon.hash([a, b])
     const leanIMT = new LeanIMT(leanIMTHash)
 
-    const [, time0] = await run(async () =>
-      await leanIMT.insertMany(
-        Array.from({ length: leanIMTLeaves - 1 }, (_, i) => BigInt(i + 1))
-      )
+    const members = Array.from({ length: leanIMTLeaves - 1 }, (_, i) =>
+      BigInt(i + 1)
     )
+
+    members.push(commitment0)
+
+    const [, time0] = await run(async () => await leanIMT.insertMany(members))
 
     timeValues.push(time0)
 
     setLeanIMTTimes(timeValues.slice())
-
-    leanIMT.insert(commitment0)
 
     const [proof, time1] = await run(() =>
       leanIMT.generateProof(leanIMTLeaves - 1)
