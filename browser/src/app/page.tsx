@@ -17,6 +17,7 @@ import { run } from "@/utils/run-function"
 import InputNumber from "@/components/InputNumber"
 
 const functions = [
+  "Recreate Tree",
   "Generate Proof",
   "Verify Proof",
   "Insert member",
@@ -40,20 +41,26 @@ export default function Home() {
       true,
       smtMaxLevels
     )
-    for (let i = 0; i < smtLeaves - 1; i++) {
-      await smt.add(BigInt(i + 1), BigInt(i + 1))
-    }
+
+    const [, time0] = await run(async () => {
+      for (let i = 0; i < smtLeaves - 1; i++) {
+        await smt.add(BigInt(i + 1), BigInt(i + 1))
+      }
+    })
+    timeValues.push(time0)
+    setSMTTimes(timeValues.slice())
+
     await smt.add(commitment0, commitment0)
 
-    const [proof, time0] = await run(
+    const [proof, time1] = await run(
       async () => await smt.generateProof(commitment0)
     )
 
-    timeValues.push(time0)
+    timeValues.push(time1)
 
     setSMTTimes(timeValues.slice())
 
-    const [, time1] = await run(
+    const [, time2] = await run(
       async () =>
         await verifyProof(
           await smt.root(),
@@ -63,27 +70,27 @@ export default function Home() {
         )
     )
 
-    timeValues.push(time1)
+    timeValues.push(time2)
 
     setSMTTimes(timeValues.slice())
 
     const { commitment: commitment1 } = new Identity()
 
-    const [, time2] = await run(
+    const [, time3] = await run(
       async () => await smt.add(commitment1, commitment1)
     )
 
-    timeValues.push(time2)
+    timeValues.push(time3)
 
     setSMTTimes(timeValues.slice())
 
     const { commitment: commitment2 } = new Identity()
 
-    const [, time3] = await run(
+    const [, time4] = await run(
       async () => await smt.update(commitment0, commitment2)
     )
 
-    timeValues.push(time3)
+    timeValues.push(time4)
 
     setSMTTimes(timeValues.slice())
   }, [smtMaxLevels, smtLeaves])
@@ -96,42 +103,50 @@ export default function Home() {
     const leanIMTHash = (a: bigint, b: bigint) => poseidon2([a, b])
     // const leanIMTHash = (a: bigint, b: bigint) => poseidon.hash([a, b])
     const leanIMT = new LeanIMT(leanIMTHash)
-    leanIMT.insertMany(
-      Array.from({ length: leanIMTLeaves - 1 }, (_, i) => BigInt(i + 1))
-    )
-    leanIMT.insert(commitment0)
 
-    const [proof, time0] = await run(() =>
-      leanIMT.generateProof(leanIMTLeaves - 1)
+    const [, time0] = await run(async () =>
+      await leanIMT.insertMany(
+        Array.from({ length: leanIMTLeaves - 1 }, (_, i) => BigInt(i + 1))
+      )
     )
 
     timeValues.push(time0)
 
     setLeanIMTTimes(timeValues.slice())
 
-    const [, time1] = await run(() =>
-      leanIMT.verifyProof(proof as LeanIMTMerkleProof)
+    leanIMT.insert(commitment0)
+
+    const [proof, time1] = await run(() =>
+      leanIMT.generateProof(leanIMTLeaves - 1)
     )
 
     timeValues.push(time1)
 
     setLeanIMTTimes(timeValues.slice())
 
-    const { commitment: commitment1 } = new Identity()
-
-    const [, time2] = await run(() => leanIMT.insert(commitment1))
+    const [, time2] = await run(() =>
+      leanIMT.verifyProof(proof as LeanIMTMerkleProof)
+    )
 
     timeValues.push(time2)
 
     setLeanIMTTimes(timeValues.slice())
 
+    const { commitment: commitment1 } = new Identity()
+
+    const [, time3] = await run(() => leanIMT.insert(commitment1))
+
+    timeValues.push(time3)
+
+    setLeanIMTTimes(timeValues.slice())
+
     const { commitment: commitment2 } = new Identity()
 
-    const [, time3] = await run(
+    const [, time4] = await run(
       async () => await leanIMT.update(leanIMTLeaves - 1, commitment2)
     )
 
-    timeValues.push(time3)
+    timeValues.push(time4)
 
     setLeanIMTTimes(timeValues.slice())
   }, [leanIMTLeaves])
