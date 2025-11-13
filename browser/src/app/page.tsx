@@ -18,8 +18,8 @@ import InputNumber from "@/components/InputNumber"
 
 const functions = [
   "Recreate Tree",
-  "Generate Proof",
-  "Verify Proof",
+  "Generate Merkle Proof",
+  "Verify Merkle Proof",
   "Insert member",
   "Update Member"
 ]
