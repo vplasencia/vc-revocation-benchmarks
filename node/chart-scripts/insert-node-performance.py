@@ -36,7 +36,7 @@ plt.xlabel("Leaves")
 plt.ylabel("Time (ms)")
 plt.legend(handles=[plt.Line2D([], [], color="#22c55e", marker='o', label="LeanIMT"),
                     plt.Line2D([], [], color="#3b82f6", marker='s', label="SMT"),
-                    legend_line], labels=["LeanIMT", "SMT", "LeanIMT Revocation"])
+                    legend_line], labels=["SMT", "LeanIMT", "LeanIMT (Revocation)"])
 
 plt.grid(True, linestyle="--", alpha=0.6)
 # Save image (uncomment next line to save)
