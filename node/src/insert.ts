@@ -4,6 +4,7 @@ import { poseidon2 } from "poseidon-lite"
 import { Merkletree, InMemoryDB, str2Bytes } from "@iden3/js-merkletree"
 import { generateTable } from "utils/generate-table"
 import { addComparisonColumn } from "utils/add-comparison-column"
+import { generateMarkdownTable } from "utils/generate-markdown-table"
 
 /**
  * Depths per SMT tree size:
@@ -176,6 +177,8 @@ const main = async () => {
   const table = bench.table((task: Task) => generateTable(task))
 
   addComparisonColumn(table, bench)
+
+  generateMarkdownTable(table, "insert.md")
 
   console.table(table)
 }
