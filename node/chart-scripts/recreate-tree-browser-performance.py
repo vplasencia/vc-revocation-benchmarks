@@ -41,6 +41,6 @@ plt.legend(handles=[plt.Line2D([], [], color="#22c55e", marker='o', label="LeanI
 
 plt.grid(True, linestyle="--", alpha=0.6)
 # Save image (uncomment next line to save)
-plt.savefig("../chart-images/insert-node.png", dpi=300, bbox_inches="tight")
+plt.savefig("../chart-images/recreate-tree-browser.png", dpi=300, bbox_inches="tight")
 plt.show()
 

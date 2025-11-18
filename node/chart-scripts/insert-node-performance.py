@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from utils.read_json_data import read_json_data
 
-data = read_json_data('../data/insert.json')
+data = read_json_data('../data/insert-node.json')
 
 # ----- Data -----
 leaves = [128, 512, 1024, 2048]
