@@ -23,3 +23,5 @@ yarn-error.log*
 
 # ptau files
 /ptau
+
+/public

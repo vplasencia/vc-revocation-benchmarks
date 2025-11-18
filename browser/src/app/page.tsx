@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react"
 import { LeanIMT, LeanIMTMerkleProof } from "@zk-kit/lean-imt"
 import { poseidon2 } from "poseidon-lite"
+import { groth16 } from "snarkjs"
 // import { poseidon } from "@iden3/js-crypto"
 import {
   Merkletree,
@@ -20,9 +21,19 @@ const functions = [
   "Recreate Tree",
   "Generate Merkle Proof",
   "Verify Merkle Proof",
+  "Generate ZK Proof",
+  "Recreate + Generate MP + ZKP",
   "Insert member",
   "Update Member"
 ]
+
+const getWasmPath = (tree: string, depth: number): string => {
+  return `/zk-artifacts/${tree}-${depth}.wasm`
+}
+
+const getZkeyPath = (tree: string, depth: number): string => {
+  return `/zk-artifacts/${tree}-${depth}.zkey`
+}
 
 export default function Home() {
   const [smtMaxLevels, setSMTMaxLevels] = useState<number>(20)
@@ -79,23 +90,55 @@ export default function Home() {
 
     setSMTTimes(timeValues.slice())
 
-    const { commitment: commitment1 } = new Identity()
+    const smtCircomProof = await smt.generateCircomVerifierProof(
+      BigInt(smtLeaves + 100),
+      await smt.root()
+    )
 
     const [, time3] = await run(
-      async () => await smt.add(commitment1, commitment1)
+      async () =>
+        await groth16.fullProve(
+          {
+            enabled: 1,
+            fnc: 1, // 0 for membership proofs, 1 for non-membership proofs
+            root: smtCircomProof.root.string(),
+            siblings: smtCircomProof.siblings.map((s) => s.string()),
+            oldKey: smtCircomProof.oldKey.string(),
+            oldValue: smtCircomProof.oldValue.string(),
+            isOld0: smtCircomProof.isOld0 ? 1 : 0,
+            key: smtCircomProof.key.string(),
+            value: smtCircomProof.value.string()
+          },
+          getWasmPath("smt", smtMaxLevels),
+          getZkeyPath("smt", smtMaxLevels)
+        )
     )
 
     timeValues.push(time3)
 
     setSMTTimes(timeValues.slice())
 
-    const { commitment: commitment2 } = new Identity()
+    timeValues.push(time0 + time1 + time3)
+
+    setSMTTimes(timeValues.slice())
+
+    const { commitment: commitment1 } = new Identity()
 
     const [, time4] = await run(
-      async () => await smt.update(commitment0, commitment2)
+      async () => await smt.add(commitment1, commitment1)
     )
 
     timeValues.push(time4)
+
+    setSMTTimes(timeValues.slice())
+
+    const { commitment: commitment2 } = new Identity()
+
+    const [, time5] = await run(
+      async () => await smt.update(commitment0, commitment2)
+    )
+
+    timeValues.push(time5)
 
     setSMTTimes(timeValues.slice())
   }, [smtMaxLevels, smtLeaves])
@@ -137,21 +180,50 @@ export default function Home() {
 
     setLeanIMTTimes(timeValues.slice())
 
-    const { commitment: commitment1 } = new Identity()
+    const leanIMTDepth = proof.siblings.length !== 0 ? proof.siblings.length : 1
+    for (let i = 0; i < leanIMTDepth; i += 1) {
+      if (proof.siblings[i] === undefined) {
+        proof.siblings[i] = 0n
+      }
+    }
 
-    const [, time3] = await run(() => leanIMT.insert(commitment1))
+    const [, time3] = await run(
+      async () =>
+        await groth16.fullProve(
+          {
+            leaf: 2n,
+            depth: leanIMTDepth,
+            index: proof.index,
+            siblings: proof.siblings
+          },
+          getWasmPath("leanimt", leanIMTDepth),
+          getZkeyPath("leanimt", leanIMTDepth)
+        )
+    )
 
     timeValues.push(time3)
 
     setLeanIMTTimes(timeValues.slice())
 
+    timeValues.push(time0 + time1 + time3)
+
+    setLeanIMTTimes(timeValues.slice())
+
+    const { commitment: commitment1 } = new Identity()
+
+    const [, time4] = await run(() => leanIMT.insert(commitment1))
+
+    timeValues.push(time4)
+
+    setLeanIMTTimes(timeValues.slice())
+
     const { commitment: commitment2 } = new Identity()
 
-    const [, time4] = await run(
+    const [, time5] = await run(
       async () => await leanIMT.update(leanIMTLeaves - 1, commitment2)
     )
 
-    timeValues.push(time4)
+    timeValues.push(time5)
 
     setLeanIMTTimes(timeValues.slice())
   }, [leanIMTLeaves])
@@ -186,7 +258,9 @@ export default function Home() {
                 <div key={i} className="flex items-center gap-6">
                   <div className="flex gap-6 py-2">
                     <div className="flex font-semibold sm:w-96 md:w-72 w-40">
-                      {fn}
+                      {fn.includes("Generate ZK Proof")
+                        ? "Generate Non-Membership ZK Proof"
+                        : fn}
                     </div>
                     <div className="font-normal">
                       {smtTimes[i]
@@ -221,7 +295,9 @@ export default function Home() {
                 <div key={i} className="flex items-center gap-6">
                   <div className="flex gap-6 py-2">
                     <div className="flex font-semibold sm:w-96 md:w-72 w-40">
-                      {fn}
+                      {fn.includes("Generate ZK Proof")
+                        ? "Generate Membership ZK Proof"
+                        : fn}
                     </div>
                     <div className="font-normal">
                       {leanIMTTimes[i]
