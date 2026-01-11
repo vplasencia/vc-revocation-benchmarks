@@ -2,13 +2,13 @@
 
 This project contains SMT and LeanIMT Circom benchmarks.
 
-## Install dependencies
+## Install Dependencies
 
 ```sh
 yarn
 ```
 
-## Compile circuit
+## Compile Circuit
 
 Compile the circuit selected as default.
 
@@ -16,31 +16,31 @@ Compile the circuit selected as default.
 yarn compile
 ```
 
-## Compile SMT circuit
+## Compile SMT Circuit
 
 ```sh
 yarn compile:smt
 ```
 
-## Compile LeanIMT circuit
+## Compile LeanIMT Circuit
 
 ```sh
 yarn compile:leanimt
 ```
 
-## Remove build folder
+## Remove Build Folder
 
 ```sh
 yarn remove:build
 ```
 
-## Remove circuits folder
+## Remove Circuits Folder
 
 ```sh
 yarn remove:circuits
 ```
 
-## Create LeanIMT circuits
+## Create LeanIMT Circuits
 
 Dynamically create the LeanIMT circuits for tree depths from start to end.
 
@@ -51,7 +51,7 @@ yarn create:leanimt-files <start> <end>
 <start>: First tree depth value in the range
 <end>: Last tree depth value in the range
 
-## Create SMT circuits
+## Create SMT Circuits
 
 Dynamically create the SMT circuits for tree depths from start to end.
 
@@ -90,7 +90,7 @@ Go inside the `chart-scripts` folder.
 python3 circuit_constraints.py
 ```
 
-## Code formatting
+## Code Formatting
 
 Run [Prettier](https://prettier.io/) to check formatting rules:
 

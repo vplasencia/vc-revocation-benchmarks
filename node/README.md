@@ -2,7 +2,7 @@
 
 This project contains SMT and LeanIMT Node.js benchmarks.
 
-## Install dependencies
+## Install Dependencies
 
 ```sh
 yarn
@@ -98,7 +98,7 @@ Generate benchmarks for the SMT with different numbers of tree members for the v
 yarn verify:zk-proof:non-membership
 ```
 
-### Run zk-artifact Size
+### Run ZK-Artifact Size
 
 Get zk-artifact Size (WASM, ZKEY and JSON) for both SMT and LeanIMT.
 
@@ -106,7 +106,7 @@ Get zk-artifact Size (WASM, ZKEY and JSON) for both SMT and LeanIMT.
 yarn zk-artifact-size
 ```
 
-## Copy zk-artifacts
+## Copy ZK-Artifacts
 
 Copy the zk-artifacts into a `artifacts` folder in the project root. These artifacts are used to generate the ZK benchmarks.
 
@@ -142,7 +142,7 @@ python3 node-performance.py
 python3 recreate-tree-browser-performance.py
 ```
 
-## Code formatting
+## Code Formatting
 
 Run [Prettier](https://prettier.io/) to check formatting rules:
 
