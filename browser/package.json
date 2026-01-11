@@ -18,7 +18,7 @@
     "apexcharts": "^5.3.5",
     "idb-keyval": "^6.2.2",
     "markdown-table-ts": "^1.0.3",
-    "next": "15.5.3",
+    "next": "15.5.9",
     "poseidon-lite": "^0.3.0",
     "pretty-ms": "^9.3.0",
     "react": "19.1.0",
