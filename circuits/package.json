@@ -2,8 +2,6 @@
   "name": "node",
   "packageManager": "yarn@4.9.4",
   "scripts": {
-    "smt": "tsx src/smt.ts",
-    "leanimt": "tsx src/leanimt.ts",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w .",
     "compile": "chmod u+x ./scripts/compile.sh && ./scripts/compile.sh",
